@@ -1,0 +1,2 @@
+This is similar to map3 except that the objective is to reach a certain room
+(again you may have to kill something first).

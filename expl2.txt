@@ -1,0 +1,5 @@
+This map has more rooms but all exits are still "normal". It demonstrates:
+(1) some enemy (ant) can be killed without any object;
+(2) some enemy (zombie, werewolf) needs multiple objects to be killed;
+(3) the kill objective can be multiple enemies, but not necessarily all
+(ants not required).

@@ -1,0 +1,7 @@
+This map has slightly different words for exits (and shows that multiple
+names can refer to the same exit just to make game play easier);
+the objective is to collect things, although you need to kill something
+first (unless you are very lucky).
+
+Oh and there are some one-way doors, and if you visit the rooms in the 
+wrong order you get trapped.

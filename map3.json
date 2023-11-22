@@ -1,0 +1,73 @@
+{
+  "rooms":[
+  {
+    "id":"lobby",
+    "desc":"You are in the front room of a house. There are stairs leading up to the first floor. You noticed someone wrote the numbers 3,4,1,2 on a wall.",
+    "exits":{"up":"corridor"}
+  },
+  {
+    "id":"corridor",
+    "desc":"You are in a corridor with three doors, to your left with a number 1, in front of you with a number 2, and to your right with a number 3. There are stairs going back down to the ground floor.",
+    "exits":{"left":"room1","door1":"room1","front":"room2","door2":"room2","right":"room3","door3":"room3","down":"lobby"}
+  },
+  {
+    "id":"room1",
+    "desc":"This room has no exit other than the door you just came through.",
+    "exits":{"back":"corridor","out":"corridor"}
+  },
+  {
+    "id":"room2",
+    "desc":"As soon as you entered this room the door behind you disappeared! This room has no exit.",
+    "exits":{}
+  },
+  {
+    "id":"room3",
+    "desc":"There is a door with number 4 on your left, and another door leading back to the corridor.",
+    "exits":{"left":"room4","back":"corridor","corridor":"corridor"}
+  },
+  {
+    "id":"room4",
+    "desc":"This room has no exit other than the door you just came through.",
+    "exits":{"back":"room3","out":"room3"}
+  }
+  ],
+  "objects":[
+  {
+    "id":"gun",
+    "desc":"This is just a normal gun.",
+    "initialroom":"room4"
+  },
+  {
+    "id":"red gem",
+    "desc":"It is a red gem.",
+    "initialroom":"room1"
+  },
+  {
+    "id":"green gem",
+    "desc":"It is a green gem.",
+    "initialroom":"room2"
+  },
+  {
+    "id":"blue gem",
+    "desc":"It is a blue gem.",
+    "initialroom":"room3"
+  }
+  ],
+  "enemies":[
+  {
+    "id":"big guy",
+    "desc":"The guy is very big. He says in order to get the red gem you have to beat him first.",
+    "aggressiveness":99,
+    "initialroom":"room1",
+    "killedby":["gun"]
+  }
+  ],
+  "player":{
+    "initialroom":"lobby"
+  },
+  "objective":{
+    "type":"collect",
+    "what":["red gem","green gem","blue gem"]
+  }
+}
+
