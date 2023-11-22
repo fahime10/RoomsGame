@@ -1,0 +1,77 @@
+{
+  "rooms":[
+  {
+    "id":"room1",
+    "desc":"There is a door to the east.",
+    "exits":{"east":"room2"}
+  },
+  {
+    "id":"room2",
+    "desc":"There is a door to the north and a door to the west.",
+    "exits":{"west":"room1","north":"room3"}
+  },
+  {
+    "id":"room3",
+    "desc":"There is a door to the north and a door to the south.",
+    "exits":{"south":"room2","north":"room4"}
+  },
+  {
+    "id":"room4",
+    "desc":"",
+    "exits":{"south":"room3"}
+  }
+  ],
+  "objects":[
+  {
+    "id":"gun",
+    "desc":"It looks like you can use it to shoot and kill things.",
+    "initialroom":"room1"
+  },
+  {
+    "id":"bullet",
+    "desc":"These are bullets that can be used with the gun.",
+    "initialroom":"room2"
+  },
+  {
+    "id":"apple",
+    "desc":"It is just an ordinary apple.",
+    "initialroom":"room2"
+  },
+  {
+    "id":"silver bullet",
+    "desc":"They are a different kind of bullets. You remember reading somewhere that they can kill special monsters.",
+    "initialroom":"room3"
+  }
+  ],
+  "enemies":[
+  {
+    "id":"ant",
+    "desc":"It's a normal ant. It doesn't look like it can cause harm.",
+    "aggressiveness":0,
+    "initialroom":"room2",
+    "killedby":[]
+  },
+  {
+    "id":"zombie",
+    "desc":"The zombie can only move very slowly.",
+    "aggressiveness":20,
+    "initialroom":"room3",
+    "killedby":["gun","bullet"]
+  },
+  {
+    "id":"werewolf",
+    "desc":"The werewolf looks like it wants to attack you.",
+    "aggressiveness":100,
+    "initialroom":"room4",
+    "killedby":["gun","silver bullet"]
+  }
+  ],
+  "player":{
+    "initialroom":"room1"
+  },
+  "objective":{
+    "type":"kill",
+    "what":["zombie","werewolf"]
+  }
+}
+

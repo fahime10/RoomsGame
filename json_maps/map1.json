@@ -1,0 +1,38 @@
+{
+  "rooms":[
+  {
+    "id":"room1",
+    "desc":"On the wall are these words in red: KILL ALL MONSTERS OR DIE. There is a door to the east.",
+    "exits":{"east":"room2"}
+  },
+  {
+    "id":"room2",
+    "desc":"This is another room.",
+    "exits":{"west":"room1"}
+  }
+  ],
+  "objects":[
+  {
+    "id":"gun",
+    "desc":"It looks like you can use it to shoot and kill things.",
+    "initialroom":"room1"
+  }
+  ],
+  "enemies":[
+  {
+    "id":"zombie",
+    "desc":"The zombie looks like it wants to attack you.",
+    "aggressiveness":50,
+    "initialroom":"room2",
+    "killedby":["gun"]
+  }
+  ],
+  "player":{
+    "initialroom":"room1"
+  },
+  "objective":{
+    "type":"kill",
+    "what":["zombie"]
+  }
+}
+
