@@ -2,13 +2,13 @@
 
 using namespace std;
 
-class Object {
+class Item {
 public:
     // Constructor
-    Object(const string& id, const string& desc, const string& initialRoom);
+    Item(const string& id, const string& desc, const string& initialRoom);
 
     // Destructor
-    ~Object();
+    ~Item();
 
     // Getter functions
     string getId() const;
@@ -19,5 +19,5 @@ private:
     // Member variables
     string id_;
     string description_;
-    string initialRoom_;
+    string initial_room;
 };

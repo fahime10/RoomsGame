@@ -20,7 +20,6 @@ public:
     const vector<string>& getKilledBy() const;
 
     // Member functions
-    void moveToRoom(const string& room);
     bool attackPlayer() const;
     void printAttackMessage() const;
 
@@ -29,6 +28,6 @@ private:
     string id_;
     string description_;
     int aggressiveness_;
-    string initialRoom_;
-    vector<string> killedBy_;
+    string initial_room;
+    vector<string> killed_by;
 };

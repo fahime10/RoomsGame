@@ -1,32 +1,32 @@
-// Object.cpp
-#include "Object.h"
+// Item.cpp
+#include "Item.h"
 #include <iostream>
 
 using namespace std;
 
 // Constructor implementation
-Object::Object(const string& id, const string& desc, const string& initialRoom) {
+Item::Item(const string& id, const string& desc, const string& initialRoom) {
     id_ = id;
     description_ = desc;
-    initialRoom_ = initialRoom;
+    initial_room = initialRoom;
 }
 
 // Destructor implementation
-Object::~Object() {
+Item::~Item() {
  
 }
 
 // Getter function implementations
-string Object::getId() const {
+string Item::getId() const {
     return id_;
 }
 
 // Getter function to get the description of the object
-string Object::getDescription() const {
+string Item::getDescription() const {
     return description_;
 }
 
 // Getter function to get the initial room where the object is located
-string Object::getInitialRoom() const {
-    return initialRoom_;
+string Item::getInitialRoom() const {
+    return initial_room;
 }
