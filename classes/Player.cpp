@@ -1,24 +1,19 @@
 #include "Player.h"
 
-Player::Player() {
-    // Dynamic array or linked list
-}
-
-Player::~Player() {
-    // To implement
-}
-
 // When user executes "list items"
 string Player::viewInventory() const {
     string items;
 
     items = "Your items are: \n";
 
-    // if (inventory_) {
-    //     // To implement
-    // } else {
-    //     items += "Empty inventory";
-    // }
+    for (const Item& item: inventory_) {
+        items += item.getId() + " \n";
+    }
 
     return items;
+}
+
+// When user executes "grab" or "take" or "pick"
+void Player::addToInventory(Item item) {
+    inventory_.push_back(item);
 }

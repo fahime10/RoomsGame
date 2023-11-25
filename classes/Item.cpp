@@ -11,11 +11,6 @@ Item::Item(const string& id, const string& desc, const string& initialRoom) {
     initial_room = initialRoom;
 }
 
-// Destructor implementation
-Item::~Item() {
- 
-}
-
 // Getter function implementations
 string Item::getId() const {
     return id_;

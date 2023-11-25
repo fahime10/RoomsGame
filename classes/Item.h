@@ -8,7 +8,7 @@ public:
     Item(const string& id, const string& desc, const string& initialRoom);
 
     // Destructor
-    ~Item();
+    ~Item() = default;
 
     // Getter functions
     string getId() const;
