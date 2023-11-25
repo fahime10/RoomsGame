@@ -1,3 +1,6 @@
+#ifndef ITEM_H
+#define ITEM_H
+
 #include <string>
 
 using namespace std;
@@ -21,3 +24,5 @@ private:
     string description_;
     string initial_room;
 };
+
+#endif // ITEM_H

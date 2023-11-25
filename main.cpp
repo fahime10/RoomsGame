@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "json.hpp"
+#include "GameFlow.h"
 using namespace std;
 using json = nlohmann::json;
 
@@ -19,6 +20,9 @@ int main(int argc, char* argv[]) {
 	ifstream fin("json_maps/" + map);
 	json j;
 	fin >> j;
+
+    GameFlow game;
+    game.buildGame(j);
 
 	// This outputs how many things there are at the top level
 	// and the keys (5: rooms, objects, enemies, player, objective)

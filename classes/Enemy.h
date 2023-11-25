@@ -1,3 +1,6 @@
+#ifndef ENEMY_H
+#define ENEMY_H
+
 #include <string>
 #include <vector>
 
@@ -31,3 +34,5 @@ private:
     string initial_room;
     vector<string> killed_by;
 };
+
+#endif // ENEMY_H
