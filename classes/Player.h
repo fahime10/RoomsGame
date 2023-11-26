@@ -1,3 +1,7 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
+
 #include "Item.h"
 #include <vector>
 using namespace std;
@@ -19,3 +23,5 @@ private:
     string initial_room;
     vector<Item> inventory_;
 };
+
+#endif // PLAYER_H
