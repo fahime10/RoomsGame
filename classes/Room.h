@@ -2,13 +2,13 @@
 #include "Enemy.h"
 #include <string>
 #include <vector>
+#include <map>
 using namespace std;
 
 class Room {
 
 public:
-    // This constructor should define all items, enemies and exits
-    Room(string, string, vector<string>, bool);
+    Room(string, string, vector<map<string, string>>);
 
     ~Room() = default;
 
@@ -43,7 +43,7 @@ private:
 
     vector<Item> items_;
     vector<Enemy> enemy_;
-    vector<string> exits_;
+    vector<map<string, string>> exits_;
 
     bool player_location;
 };

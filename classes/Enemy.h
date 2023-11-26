@@ -9,8 +9,8 @@ using namespace std;
 class Enemy {
 public:
     // Constructor
-    Enemy(const string& id, const string& desc, int aggressiveness,
-          const string& initialRoom, const vector<string>& killedBy);
+    Enemy(const string id, const string desc, int aggressiveness,
+          const string initialRoom, const vector<string> killedBy);
 
     // Destructor
     ~Enemy();
@@ -20,7 +20,7 @@ public:
     string getDescription() const;
     int getAggressiveness() const;
     string getInitialRoom() const;
-    const vector<string>& getKilledBy() const;
+    string getKilledBy() const;
 
     // Member functions
     bool attackPlayer() const;

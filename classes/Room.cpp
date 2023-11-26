@@ -1,14 +1,14 @@
 #include "Room.h"
 #include <string>
+#include <map>
 using namespace std;
 
 // Anytime a Room instance is created, we do not know items and enemies beforehand, as those
 // are created after rooms, and then assigned to rooms
-Room::Room(string id, string description, vector<string> exits, bool playerLocation = false) {
+Room::Room(string id, string description, vector<map<string, string>> exits = {}) {
     id_ = id;
     description_ = description;
     exits_ = exits;
-    player_location = playerLocation;
 }
 
 string Room::getId() const {
@@ -27,8 +27,10 @@ string Room::getExits() const {
 
         exits = "Your exits are: \n";
 
-        for (const string& exit: exits_) {
-            exits += exit + " \n";
+        for (const auto& map: exits_) {
+            for (const auto& pair: map) {
+                exits += pair.first + ", which goes to " + pair.second + " \n";
+            }
         }
 
         return exits;
@@ -44,8 +46,10 @@ string Room::printExits() const {
     exits = "Your exits are: \n";
 
     if (!exits_.empty()) {
-        for (const string& exit: exits_) {
-            exits += exit + " \n";
+        for (const auto& map: exits_) {
+            for (const auto& pair: map) {
+                exits += pair.second + " \n";
+            }
         }
     } else {
         exits += "There are no exits";
