@@ -63,6 +63,26 @@ string Room::getPrevExit() const {
     return prev_exit;
 }
 
+string Room::getEnemies() const {
+    string enemies;
+    
+    for (auto enemy: enemies_) {
+        enemies += enemy.getId() + " \n";
+    }
+    
+    return enemies;
+}
+
+string Room::getItems() const {
+    string items;
+
+    for (auto item: items_) {
+        items += item.getId() + " \n";
+    }
+
+    return items;
+}
+
 // Function to be used in gameflow, add items one by one
 void Room::addItem(Item item) {
     items_.push_back(item);
@@ -70,7 +90,7 @@ void Room::addItem(Item item) {
 
 // Function to be used in gameflow, add enemy/enemies one by one
 void Room::addEnemy(Enemy enemy) {
-    enemy_.push_back(enemy);
+    enemies_.push_back(enemy);
 }
 
 // This relies on the JSON map, where each room has a way to go back to previous room

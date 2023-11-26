@@ -22,6 +22,7 @@ void GameFlow::buildGame(json j) {
                 keyValues.push_back(map);
             }
             Room r(room["id"], room["desc"], keyValues);
+            rooms.push_back(r);
         }
 
         for (auto enemy: j["enemies"]) {
@@ -31,7 +32,35 @@ void GameFlow::buildGame(json j) {
                 killedBy.push_back(item);
             }
             Enemy e(enemy["id"], enemy["desc"], enemy["aggressiveness"], enemy["initialroom"], killedBy);
+            enemies.push_back(e);
         }
+
+        for (auto object: j["objects"]) {
+            Item i(object["id"], object["desc"], object["initialroom"]);
+            items.push_back(i);
+        }
+
+        p = Player(j["player"]["initialroom"]);
+
+        for (Room room: rooms) {
+            for (Enemy enemy: enemies) {
+                if (enemy.getInitialRoom() == room.getId()) {
+                    room.addEnemy(enemy);
+                }
+            }
+
+            for (Item item: items) {
+                if (item.getInitialRoom() == room.getId()) {
+                    room.addItem(item);
+                }
+            }
+
+            if (p.getInitialRoom() == room.getId()) {
+                room.setPlayerLocation();
+            } 
+        }
+
+
     } catch (exception ex) {
         cerr << "Error reading file" << endl;
         return;

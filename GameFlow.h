@@ -13,5 +13,9 @@ class GameFlow {
         void buildGame(json);
 
     private:
-        
+        vector<Room> rooms;
+        vector<Enemy> enemies;
+        vector<Item> items;
+
+        Player p;
 };

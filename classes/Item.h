@@ -8,7 +8,7 @@ using namespace std;
 class Item {
 public:
     // Constructor
-    Item(const string& id, const string& desc, const string& initialRoom);
+    Item(const string id, const string desc, const string initialRoom);
 
     // Destructor
     ~Item() = default;

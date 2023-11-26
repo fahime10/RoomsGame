@@ -16,7 +16,9 @@ public:
 
     string getDescription() const;
 
-    int getItemAmount() const;
+    string getEnemies() const;
+
+    string getItems() const;
 
     string getExits() const;
 
@@ -32,8 +34,6 @@ public:
 
     void setPlayerLocation();
 
-    void setExits(vector<string> exits);
-
     string printExits() const;
 
 private:
@@ -42,7 +42,7 @@ private:
     string prev_exit;
 
     vector<Item> items_;
-    vector<Enemy> enemy_;
+    vector<Enemy> enemies_;
     vector<map<string, string>> exits_;
 
     bool player_location;
