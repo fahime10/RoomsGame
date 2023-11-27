@@ -3,7 +3,7 @@ CXXFLAGS = -O0 -g3 -std=c++17 -I./classes
 
 SRCDIR 	 = ./classes
 
-SOURCES  = $(wildcard $(SRCDIR)/*.cpp) main.cpp GameFlow.cpp
+SOURCES  = $(wildcard $(SRCDIR)/*.cpp) main.cpp GameFlow.cpp Input.cpp
 
 OBJECTS  = $(patsubst %.cpp, %.o, $(filter %.cpp, $(SOURCES)))
 

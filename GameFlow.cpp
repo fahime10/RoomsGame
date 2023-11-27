@@ -7,10 +7,12 @@
 #include "classes/Room.h"
 #include "classes/Player.h"
 #include "classes/Enemy.h"
+#include "Input.h"
 using namespace std;
 using json = nlohmann::json;
 
 void presentCurrentRoom(Player, vector<Room>&);
+void checkGameOver();
 
 // Build all instances of Room, Item, Enemy and Player first, then populate
 // all the Room instances with Item, Enemy and Player as defined in the 
@@ -80,12 +82,19 @@ void GameFlow::playGame() {
 
     getline(cin, command);
 
+    Input input;
+
     while (command != "quit" && command != "q") {
+        input = parseInput(command);
+        handleUserInput(input, p, rooms);
+        checkGameOver();
 
+        if (input != Input::LOOK && input != Input::UNKNOWN) {
+            presentCurrentRoom(p, rooms);
+        }
+
+        getline(cin, command);
     }
-
-    
-
 }
 
 // This presents the current room the player is at
@@ -96,7 +105,6 @@ void presentCurrentRoom(Player p, vector<Room>& rooms) {
         }
     }
 }
-
 
 // This will constantly check if the player has been defeated by enemy or
 // by soft-locking themselves
