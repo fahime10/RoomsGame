@@ -10,6 +10,11 @@
 using namespace std;
 using json = nlohmann::json;
 
+void presentCurrentRoom(Player, vector<Room>&);
+
+// Build all instances of Room, Item, Enemy and Player first, then populate
+// all the Room instances with Item, Enemy and Player as defined in the 
+// chosen JSON map
 void GameFlow::buildGame(json j) {
     try {
         for (auto room: j["rooms"]) {
@@ -57,14 +62,44 @@ void GameFlow::buildGame(json j) {
 
             if (p.getInitialRoom() == room.getId()) {
                 room.setPlayerLocation();
+                p.setCurrentRoom(room.getId());
             } 
         }
-
 
     } catch (exception ex) {
         cerr << "Error reading file" << endl;
         return;
     }
+}
+
+// This is where user input is handled
+void GameFlow::playGame() {
+    presentCurrentRoom(p, rooms);
+
+    string command;
+
+    getline(cin, command);
+
+    while (command != "quit" && command != "q") {
+
+    }
 
     
+
+}
+
+// This presents the current room the player is at
+void presentCurrentRoom(Player p, vector<Room>& rooms) {
+    for (auto room: rooms) {
+        if (p.getCurrentRoom() == room.getId()) {
+            cout << room.getDescription() << endl;
+        }
+    }
+}
+
+
+// This will constantly check if the player has been defeated by enemy or
+// by soft-locking themselves
+void checkGameOver() {
+
 }

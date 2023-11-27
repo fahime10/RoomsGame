@@ -8,6 +8,10 @@ string Player::getInitialRoom() const {
     return initial_room;
 }
 
+string Player::getCurrentRoom() const {
+    return current_room;
+}
+
 // When user executes "list items"
 string Player::viewInventory() const {
     string items;
@@ -24,4 +28,8 @@ string Player::viewInventory() const {
 // When user executes "grab" or "take" or "pick"
 void Player::addToInventory(Item item) {
     inventory_.push_back(item);
+}
+
+void Player::setCurrentRoom(string id) {
+    current_room = id;
 }

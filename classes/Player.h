@@ -15,12 +15,17 @@ public:
 
     string getInitialRoom() const;
 
+    string getCurrentRoom() const;
+
     string viewInventory() const;
 
     void addToInventory(Item);
 
+    void setCurrentRoom(string);
+
 private:
     string initial_room;
+    string current_room;
     vector<Item> inventory_;
 };
 

@@ -23,6 +23,7 @@ int main(int argc, char* argv[]) {
 
     GameFlow game;
     game.buildGame(j);
+	game.playGame();
 
 	// // This outputs how many things there are at the top level
 	// // and the keys (5: rooms, objects, enemies, player, objective)
