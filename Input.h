@@ -10,8 +10,8 @@
 enum class Input {
     LOOK,
     LIST_ITEMS,
-    LIST_EXITS,
     TAKE_ITEM,
+    LIST_EXITS,
     GO_LEFT,
     GO_UP,
     GO_RIGHT,
@@ -21,7 +21,7 @@ enum class Input {
     UNKNOWN
 };
 
-Input parseInput(const string& input);
+Input parseInput(const vector<string>& input);
 
 void handleUserInput(Input input, Player& p, vector<Room> rooms, vector<Item> items);
 

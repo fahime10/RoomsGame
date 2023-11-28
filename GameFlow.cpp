@@ -82,10 +82,19 @@ void GameFlow::playGame() {
 
     getline(cin, command);
 
+    // This is used to handle an array of strings
+    istringstream is(command);
+    vector<string> strArray;
+    string singleStr;
+
+    while (is >> singleStr) {
+        strArray.push_back(singleStr);
+    }
+
     Input input;
 
     while (command != "quit" && command != "q") {
-        input = parseInput(command);
+        input = parseInput(strArray);
         handleUserInput(input, p, rooms, items);
         checkGameOver();
 
@@ -95,6 +104,14 @@ void GameFlow::playGame() {
         }
 
         getline(cin, command);
+
+        strArray.clear();
+
+        istringstream is(command);
+
+        while (is >> singleStr) {
+            strArray.push_back(singleStr);
+        }
     }
 }
 

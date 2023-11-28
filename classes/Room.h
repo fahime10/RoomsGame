@@ -1,8 +1,6 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-
-
 #include "Item.h"
 #include "Enemy.h"
 #include <string>

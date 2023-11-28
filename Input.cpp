@@ -4,34 +4,26 @@ using namespace std;
 
 // This is required to work with switch statements
 // Some strings/commands could be regarded as the same enum
-Input parseInput(const string& input) {
-    if (input == "look" || input == "look around" || input == "see" || 
-        input == "check room" || input == "check") {
+Input parseInput(const vector<string>& input) {
+    if (((input[0] == "look" || input[0] == "see" || input[0] == "check") && input.size() == 1) || 
+        ((input[0] == "look" && input[1] == "around") && input.size() == 2) ||
+        ((input[0] == "check" && input[1] == "room") && input.size() == 2)) {
         return Input::LOOK;
 
-    } else if (input == "list items" || input == "items" || input == "inventory" || 
-                input == "check inventory" || input == "view inventory") {
+    } else if (((input[0] == "items" || input[0] == "inventory") && input.size() == 1) || 
+                ((input[0] == "list" && input[1] == "items") && input.size() == 2) || 
+                ((input[0] == "check" || input [0] == "view") && input[1] == "inventory" && input.size() == 2)) {
         return Input::LIST_ITEMS;
 
-    } else if (input == "list exits" || input == "exits") {
+    } else if ((input[0] == "grab" || input[0] == "take" || input[0] == "pick") && input.size() == 2) {
+        return Input::TAKE_ITEM;
+
+    } else if ((input[0] == "exit" || input[0] == "exits") && input.size() == 1 || 
+                ((input[0] == "list" && input[1] == "exits" && input.size() == 2))) {
         return Input::LIST_EXITS;
 
-    } else if (input == "go left" || input == "go west") {
-        return Input::GO_LEFT;
-
-    } else if (input == "go ahead" || input == "go up" || input == "go north") {
-        return Input::GO_UP;
-
-    } else if (input == "go right" || input == "go east") {
-        return Input::GO_RIGHT;
-
-    } else if (input == "go down" || input == "go south") {
-        return Input::GO_DOWN;
-
-    } else if (input == "go back" || input == "go out") {
-        return Input::GO_BACK;
-
-    } else if (input == "quit" || input == "quit game" || input == "q") {
+    } else if (((input[0] == "q" || input[0] == "quit") && input.size() == 1) ||
+                (input[0] == "quit" && input[1] == "game" && input.size() == 2)) {
         return Input::QUIT;
     }
     
