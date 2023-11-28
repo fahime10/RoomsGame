@@ -16,6 +16,10 @@ string Player::getCurrentRoom() const {
 string Player::viewInventory() const {
     string items;
 
+    if (inventory_.empty()) {
+        return "No items in the inventory";
+    }
+
     items = "Your items are: \n";
 
     for (const Item& item: inventory_) {

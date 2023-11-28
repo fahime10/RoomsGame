@@ -86,7 +86,7 @@ void GameFlow::playGame() {
 
     while (command != "quit" && command != "q") {
         input = parseInput(command);
-        handleUserInput(input, p, rooms);
+        handleUserInput(input, p, rooms, vector<Item>());
         checkGameOver();
 
         if (input != Input::LOOK && input != Input::UNKNOWN) {
