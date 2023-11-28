@@ -11,7 +11,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-void presentCurrentRoom(Player, vector<Room>&);
+void presentCurrentRoom(Player, vector<Room>&, vector<Item>&);
 void checkGameOver();
 
 // Build all instances of Room, Item, Enemy and Player first, then populate
@@ -49,7 +49,7 @@ void GameFlow::buildGame(json j) {
 
         p = Player(j["player"]["initialroom"]);
 
-        for (Room room: rooms) {
+        for (Room& room: rooms) {
             for (Enemy enemy: enemies) {
                 if (enemy.getInitialRoom() == room.getId()) {
                     room.addEnemy(enemy);
@@ -76,7 +76,7 @@ void GameFlow::buildGame(json j) {
 
 // This is where user input is handled
 void GameFlow::playGame() {
-    presentCurrentRoom(p, rooms);
+    presentCurrentRoom(p, rooms, items);
 
     string command;
 
@@ -86,11 +86,12 @@ void GameFlow::playGame() {
 
     while (command != "quit" && command != "q") {
         input = parseInput(command);
-        handleUserInput(input, p, rooms, vector<Item>());
+        handleUserInput(input, p, rooms, items);
         checkGameOver();
 
-        if (input != Input::LOOK && input != Input::UNKNOWN) {
-            presentCurrentRoom(p, rooms);
+        if (input != Input::LOOK && input != Input::UNKNOWN && input != Input::LIST_ITEMS &&
+            input != Input::LIST_EXITS) {
+            presentCurrentRoom(p, rooms, items);
         }
 
         getline(cin, command);
@@ -98,10 +99,15 @@ void GameFlow::playGame() {
 }
 
 // This presents the current room the player is at
-void presentCurrentRoom(Player p, vector<Room>& rooms) {
+void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Item>& items) {
     for (auto room: rooms) {
         if (p.getCurrentRoom() == room.getId()) {
-            cout << room.getDescription() << endl;
+            cout << "\n" << room.getDescription() << endl;
+
+            if (!room.getItems().empty()) {
+                cout << "There are items in this room: " << endl;
+                cout << room.printItems() << "\n" << endl;
+            }
         }
     }
 }

@@ -21,21 +21,23 @@ public:
 
     string getDescription() const;
 
-    string getEnemies() const;
+    vector<Enemy> getEnemies() const;
 
-    string getItems() const;
+    vector<Item> getItems() const;
 
     string getExits() const;
 
     string getPrevExit() const;
 
-    // Player may take those items, and so they are no longer in the room
-    void addItem(Item);
+    void addItem(Item&);
 
-    // Player may defeat those enemies, so there is no longer a threat in the room
-    void addEnemy(Enemy);
+    void addEnemy(Enemy&);
 
     void setPrevExit(string);
+
+    string printItems() const;
+
+    void printEnemies() const;
 
     void setPlayerLocation();
 

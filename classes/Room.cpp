@@ -1,4 +1,5 @@
 #include "Room.h"
+#include <iostream>
 #include <string>
 #include <map>
 using namespace std;
@@ -63,33 +64,41 @@ string Room::getPrevExit() const {
     return prev_exit;
 }
 
-string Room::getEnemies() const {
+vector<Enemy> Room::getEnemies() const {
+    return enemies_;
+}
+
+void Room::printEnemies() const {
     string enemies;
     
     for (auto enemy: enemies_) {
         enemies += enemy.getId() + " \n";
     }
     
-    return enemies;
+    cout << enemies << endl;
 }
 
-string Room::getItems() const {
+vector<Item> Room::getItems() const {
+    return items_;
+}
+
+string Room::printItems() const {
     string items;
 
     for (auto item: items_) {
-        items += item.getId() + " \n";
+        items += "[ " + item.getId() + " ] ";
     }
 
     return items;
 }
 
 // Function to be used in gameflow, add items one by one
-void Room::addItem(Item item) {
+void Room::addItem(Item& item) {
     items_.push_back(item);
-} 
+}
 
-// Function to be used in gameflow, add enemy/enemies one by one
-void Room::addEnemy(Enemy enemy) {
+// Function to be used in gameflow, add enemies one by one
+void Room::addEnemy(Enemy& enemy) {
     enemies_.push_back(enemy);
 }
 
