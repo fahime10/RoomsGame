@@ -15,6 +15,7 @@ enum class Input {
     LIST_EXITS,
     GO_LEFT,
     GO_UP,
+    MOVE,
     GO_RIGHT,
     GO_DOWN,
     GO_BACK,
@@ -25,5 +26,6 @@ enum class Input {
 Input parseInput(const vector<string>& input);
 
 void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items);
+
 
 #endif // INPUT_H
