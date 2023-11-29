@@ -19,9 +19,9 @@ public:
 
     string getDescription() const;
 
-    vector<Enemy> getEnemies() const;
+    const vector<Enemy>& getEnemies() const;
 
-    vector<Item> getItems() const;
+    const vector<Item>& getItems() const;
 
     string getExits() const;
 
@@ -29,9 +29,11 @@ public:
 
     void addItem(Item&);
 
+    void removeItem(const Item&);
+
     void addEnemy(Enemy&);
 
-    void setItems(vector<Item>& items);
+    void removeEnemy(const Enemy&);
 
     void setPrevExit(string);
 

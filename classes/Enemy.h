@@ -13,7 +13,9 @@ public:
           const string initialRoom, const vector<string> killedBy);
 
     // Destructor
-    ~Enemy();
+    ~Enemy() = default;
+
+    bool operator==(const Enemy& other) const;
 
     // Getter functions
     string getId() const;

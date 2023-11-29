@@ -2,11 +2,12 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <algorithm>
 using namespace std;
 
 // Anytime a Room instance is created, we do not know items and enemies beforehand, as those
 // are created after rooms, and then assigned to rooms
-Room::Room(string id, string description, vector<map<string, string>> exits = {}) {
+Room::Room(string id, string description, vector<map<string, string>> exits) {
     id_ = id;
     description_ = description;
     exits_ = exits;
@@ -64,7 +65,7 @@ string Room::getPrevExit() const {
     return prev_exit;
 }
 
-vector<Enemy> Room::getEnemies() const {
+const vector<Enemy>& Room::getEnemies() const {
     return enemies_;
 }
 
@@ -78,7 +79,7 @@ void Room::printEnemies() const {
     cout << enemies << endl;
 }
 
-vector<Item> Room::getItems() const {
+const vector<Item>& Room::getItems() const {
     return items_;
 }
 
@@ -97,9 +98,27 @@ void Room::addItem(Item& item) {
     items_.push_back(item);
 }
 
+// Function that runs iterator to remove specific item by reference
+void Room::removeItem(const Item& item) {
+    auto it = find(items_.begin(), items_.end(), item);
+
+    if (it != items_.end()) {
+        items_.erase(it);
+    }
+}
+
 // Function to be used in gameflow, add enemies one by one
 void Room::addEnemy(Enemy& enemy) {
     enemies_.push_back(enemy);
+}
+
+// Function that runs iterator to remove specific enemy by reference
+void Room::removeEnemy(const Enemy& enemy) {
+    auto it = find(enemies_.begin(), enemies_.end(), enemy);
+
+    if (it != enemies_.end()) {
+        enemies_.erase(it);
+    }
 }
 
 // This relies on the JSON map, where each room has a way to go back to previous room
@@ -111,8 +130,4 @@ void Room::setPrevExit(string exit) {
 // Set or unset the player location on rooms
 void Room::setPlayerLocation() {
     player_location = !player_location;
-}
-
-void Room::setItems(vector<Item>& items) {
-    items_ = items;
 }

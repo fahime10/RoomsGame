@@ -43,7 +43,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
 
             if (!(room.getItems().empty())) {
                 anyItem = true;
-                itemList = "There are items in this room \n" + room.printItems();
+                itemList = "There are items in this room: \n" + room.printItems();
             } 
             
             exits = room.getExits();
@@ -52,10 +52,11 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
 
     switch (enumInput) {
         case Input::LOOK:
-            cout << currentRoomDesc << endl;
-
             if (anyItem) {
+                cout << currentRoomDesc << endl;
                 cout << itemList << "\n" << endl;
+            } else {
+                cout << currentRoomDesc << "\n" << endl;
             }
             break;
 
@@ -67,28 +68,28 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
             if (anyItem) {
                 string requestedItem = input[1];
 
-                for (Item item: items) {
+                for (Item& item: items) {
                     if (requestedItem == item.getId()) {
                         p.addToInventory(item);
+
+                        auto it = find(items.begin(), items.end(), item);
                         
-                        Item itemToRemove(item.getId(), item.getDescription(), item.getInitialRoom());
+                        if (it != items.end()) {
+                            items.erase(it);
+                        }
 
                         for (Room& room: rooms) {
                             if (room.getId() == item.getInitialRoom()) {
-                                room.getItems().clear();
-
-                                auto it = find(items.begin(), items.end(), itemToRemove);
-                        
-                                if (it != items.end()) {
-                                    items.erase(it);
-                                }
-
-                                room.setItems(items);
+                                room.removeItem(item);
+                                cout << "You have taken: " << requestedItem << "\n" << endl;
+                                break;
                             }
                         }
-                        
                     }
+                    break;
                 }
+            } else {
+                cout << "Item not found\n" << endl;
             }
             break;
 

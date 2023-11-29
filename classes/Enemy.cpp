@@ -15,9 +15,18 @@ Enemy::Enemy(const string id, const string desc, int aggressiveness, const strin
 }
 
 
-// Destructor implementation
-Enemy::~Enemy() {
+// // Destructor implementation
+// Enemy::~Enemy() {
     
+// }
+
+// Operator == overloaded to help with iterator
+bool Enemy::operator==(const Enemy& other) const {
+    return (this->id_ == other.id_ && 
+            this->description_ == other.description_ &&
+            this->aggressiveness_ == other.aggressiveness_ &&
+            this->initial_room == other.initial_room &&
+            this->killed_by == other.killed_by);
 }
 
 // Getter function implementations

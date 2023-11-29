@@ -50,19 +50,17 @@ void GameFlow::buildGame(json j) {
         p = Player(j["player"]["initialroom"]);
 
         for (Room& room: rooms) {
-            for (Enemy enemy: enemies) {
+            for (Enemy& enemy: enemies) {
                 if (enemy.getInitialRoom() == room.getId()) {
                     room.addEnemy(enemy);
                 }
             }
 
-            // for (Item item: items) {
-            //     if (item.getInitialRoom() == room.getId()) {
-            //         room.addItem(item);
-            //     }
-            // }
-
-            room.setItems(items);
+            for (Item& item: items) {
+                if (item.getInitialRoom() == room.getId()) {
+                    room.addItem(item);
+                }
+            }
 
             if (p.getInitialRoom() == room.getId()) {
                 room.setPlayerLocation();
@@ -85,7 +83,7 @@ void GameFlow::printItems() const {
     cout << itemList << endl;
 }
 
-// This is where user input is handled
+// Function to play the game and handle all sorts of user input
 void GameFlow::playGame() {
     presentCurrentRoom(p, rooms, items);
 
@@ -104,13 +102,14 @@ void GameFlow::playGame() {
 
     Input enumInput;
 
+    // This is where user input is handled
     while (command != "quit" && command != "q") {
         enumInput = parseInput(strArray);
         handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
 
         if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
-            enumInput != Input::LIST_EXITS) {
+            enumInput != Input::LIST_EXITS && enumInput != Input::TAKE_ITEM) {
             presentCurrentRoom(p, rooms, items);
         }
 
