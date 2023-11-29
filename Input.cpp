@@ -19,6 +19,10 @@ Input parseInput(const vector<string>& input) {
     } else if ((input[0] == "grab" || input[0] == "take" || input[0] == "pick") && input.size() == 2) {
         return Input::TAKE_ITEM;
 
+    } else if (((input[0] == "check" || input[0] == "see") && input.size() == 2) ||
+                 (input[0] == "look" && input[1] == "at") && input.size() == 3) {
+        return Input::CHECK_ITEM;
+
     } else if ((input[0] == "exit" || input[0] == "exits") && input.size() == 1 || 
                 ((input[0] == "list" && input[1] == "exits" && input.size() == 2))) {
         return Input::LIST_EXITS;
@@ -67,6 +71,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
         case Input::TAKE_ITEM:
             if (anyItem) {
                 string requestedItem = input[1];
+                string foundItem = "";
 
                 for (Item& item: items) {
                     if (requestedItem == item.getId()) {
@@ -81,16 +86,46 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
                         for (Room& room: rooms) {
                             if (room.getId() == item.getInitialRoom()) {
                                 room.removeItem(item);
-                                cout << "You have taken: " << requestedItem << "\n" << endl;
+                                foundItem = "You have taken: " + requestedItem + "\n";
                                 break;
                             }
                         }
+                        break;
                     }
-                    break;
                 }
+
+                if (foundItem.empty()) {
+                    cout << "Item not found in the room\n" << endl;
+                } else {
+                    cout << foundItem << "\n" << endl;
+                }
+
             } else {
                 cout << "Item not found\n" << endl;
             }
+            break;
+
+        case Input::CHECK_ITEM:
+            if (!p.getInventory().empty()) {
+                string object = "";
+
+                for(const Item& item: p.getInventory()) {
+                    if (item.getId() == input[1] || item.getId() == input[2]) {
+                        object += item.getDescription();
+                        break;
+                    }
+                }
+
+                if (object.empty()) {
+                    cout << "Item not found\n" << endl;
+                } else {
+                    cout << object << "\n" << endl;
+                }
+
+            } else {
+                cout << "Item not found\n" << endl;
+            }
+
             break;
 
         case Input::LIST_EXITS:

@@ -11,6 +11,7 @@ enum class Input {
     LOOK,
     LIST_ITEMS,
     TAKE_ITEM,
+    CHECK_ITEM,
     LIST_EXITS,
     GO_LEFT,
     GO_UP,

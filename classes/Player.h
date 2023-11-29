@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-
 #include "Item.h"
 #include <vector>
 using namespace std;
@@ -18,6 +17,8 @@ public:
     string getCurrentRoom() const;
 
     string viewInventory() const;
+
+    const vector<Item>& getInventory() const;
 
     void addToInventory(Item&);
 

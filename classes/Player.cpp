@@ -12,6 +12,10 @@ string Player::getCurrentRoom() const {
     return current_room;
 }
 
+const vector<Item>& Player::getInventory() const {
+    return inventory_;
+}
+
 // When user executes "list items"
 string Player::viewInventory() const {
     string items;
@@ -34,6 +38,7 @@ void Player::addToInventory(Item& item) {
     inventory_.push_back(item);
 }
 
+// Set the current room id when player moves rooms
 void Player::setCurrentRoom(string id) {
     current_room = id;
 }

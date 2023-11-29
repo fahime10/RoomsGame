@@ -108,10 +108,10 @@ void GameFlow::playGame() {
         handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
 
-        if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
-            enumInput != Input::LIST_EXITS && enumInput != Input::TAKE_ITEM) {
-            presentCurrentRoom(p, rooms, items);
-        }
+        // if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
+        //     enumInput != Input::LIST_EXITS && enumInput != Input::TAKE_ITEM) {
+        //     presentCurrentRoom(p, rooms, items);
+        // }
 
         getline(cin, command);
 
