@@ -56,11 +56,13 @@ void GameFlow::buildGame(json j) {
                 }
             }
 
-            for (Item item: items) {
-                if (item.getInitialRoom() == room.getId()) {
-                    room.addItem(item);
-                }
-            }
+            // for (Item item: items) {
+            //     if (item.getInitialRoom() == room.getId()) {
+            //         room.addItem(item);
+            //     }
+            // }
+
+            room.setItems(items);
 
             if (p.getInitialRoom() == room.getId()) {
                 room.setPlayerLocation();
@@ -106,12 +108,6 @@ void GameFlow::playGame() {
         enumInput = parseInput(strArray);
         handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
-
-        for (Item item: items) {
-            cout << item.getId() << endl;
-        }
-
-        
 
         if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
             enumInput != Input::LIST_EXITS) {

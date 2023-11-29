@@ -112,3 +112,7 @@ void Room::setPrevExit(string exit) {
 void Room::setPlayerLocation() {
     player_location = !player_location;
 }
+
+void Room::setItems(vector<Item>& items) {
+    items_ = items;
+}

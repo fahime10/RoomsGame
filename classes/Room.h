@@ -31,6 +31,8 @@ public:
 
     void addEnemy(Enemy&);
 
+    void setItems(vector<Item>& items);
+
     void setPrevExit(string);
 
     string printItems() const;

@@ -73,22 +73,18 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
                         
                         Item itemToRemove(item.getId(), item.getDescription(), item.getInitialRoom());
 
-                        auto it = find(items.begin(), items.end(), itemToRemove);
-                        
-                        if (it != items.end()) {
-                            items.erase(it);
-                        }
-
                         for (Room& room: rooms) {
-                            auto it = find(room.getItems().begin(), room.getItems().end(), itemToRemove);
+                            if (room.getId() == item.getInitialRoom()) {
+                                room.getItems().clear();
 
-                            if (it != room.getItems().end()) {
-                                room.getItems().erase(it);
+                                auto it = find(items.begin(), items.end(), itemToRemove);
+                        
+                                if (it != items.end()) {
+                                    items.erase(it);
+                                }
+
+                                room.setItems(items);
                             }
-
-                            cout << room.printItems() << endl;
-
-                            break;
                         }
                         
                     }
