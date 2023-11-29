@@ -23,6 +23,6 @@ enum class Input {
 
 Input parseInput(const vector<string>& input);
 
-void handleUserInput(Input input, Player& p, vector<Room> rooms, vector<Item> items);
+void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items);
 
 #endif // INPUT_H

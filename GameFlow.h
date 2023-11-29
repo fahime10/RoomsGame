@@ -18,6 +18,8 @@ class GameFlow {
 
         void playGame();
 
+        void printItems() const;
+
     private:
         vector<Room> rooms;
         vector<Enemy> enemies;

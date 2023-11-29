@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Input.h"
+#include <algorithm>
 using namespace std;
 
 // This is required to work with switch statements
@@ -30,7 +31,7 @@ Input parseInput(const vector<string>& input) {
     return Input::UNKNOWN;
 }
 
-void handleUserInput(Input input, Player& p, vector<Room> rooms, vector<Item> items) {
+void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items) {
     string currentRoomDesc;
     string exits;
     string itemList;
@@ -49,7 +50,7 @@ void handleUserInput(Input input, Player& p, vector<Room> rooms, vector<Item> it
         }
     }
 
-    switch (input) {
+    switch (enumInput) {
         case Input::LOOK:
             cout << currentRoomDesc << endl;
 
@@ -60,6 +61,39 @@ void handleUserInput(Input input, Player& p, vector<Room> rooms, vector<Item> it
 
         case Input::LIST_ITEMS:
             cout << p.viewInventory() << "\n" << endl;
+            break;
+
+        case Input::TAKE_ITEM:
+            if (anyItem) {
+                string requestedItem = input[1];
+
+                for (Item item: items) {
+                    if (requestedItem == item.getId()) {
+                        p.addToInventory(item);
+                        
+                        Item itemToRemove(item.getId(), item.getDescription(), item.getInitialRoom());
+
+                        auto it = find(items.begin(), items.end(), itemToRemove);
+                        
+                        if (it != items.end()) {
+                            items.erase(it);
+                        }
+
+                        for (Room& room: rooms) {
+                            auto it = find(room.getItems().begin(), room.getItems().end(), itemToRemove);
+
+                            if (it != room.getItems().end()) {
+                                room.getItems().erase(it);
+                            }
+
+                            cout << room.printItems() << endl;
+
+                            break;
+                        }
+                        
+                    }
+                }
+            }
             break;
 
         case Input::LIST_EXITS:

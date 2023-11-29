@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 #include "json.hpp"
 #include "GameFlow.h"
 using namespace std;
@@ -24,6 +25,24 @@ int main(int argc, char* argv[]) {
     GameFlow game;
     game.buildGame(j);
 	game.playGame();
+
+	// vector<int> v = {0, 1, 2, 3, 4, 5};
+
+	// for (auto g: v) {
+	// 	cout << g << endl;
+	// }
+
+	// int val = 3;
+
+	// auto it = find(v.begin(), v.end(), val);
+
+	// if (it != v.end()) {
+	// 	v.erase(it);
+	// }
+
+	// for (auto num: v) {
+	// 	cout << num << " " << endl; 
+	// }
 
 	// // This outputs how many things there are at the top level
 	// // and the keys (5: rooms, objects, enemies, player, objective)

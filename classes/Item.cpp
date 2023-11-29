@@ -11,6 +11,11 @@ Item::Item(const string id, const string desc, const string initialRoom) {
     initial_room = initialRoom;
 }
 
+bool Item::operator==(const Item& other) {
+    return (this->id_ == other.getId() && this->description_ == other.getDescription() &&
+            this->initial_room == other.getInitialRoom());
+}
+
 // Getter function implementations
 string Item::getId() const {
     return id_;

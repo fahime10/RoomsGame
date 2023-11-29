@@ -13,6 +13,8 @@ public:
     // Destructor
     ~Item() = default;
 
+    bool operator==(const Item& other);
+
     // Getter functions
     string getId() const;
     string getDescription() const;

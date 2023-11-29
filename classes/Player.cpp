@@ -23,14 +23,14 @@ string Player::viewInventory() const {
     items = "Your items are: \n";
 
     for (const Item& item: inventory_) {
-        items += item.getId() + " \n";
+        items += "[ " + item.getId() + " ] \n";
     }
 
     return items;
 }
 
 // When user executes "grab" or "take" or "pick"
-void Player::addToInventory(Item item) {
+void Player::addToInventory(Item& item) {
     inventory_.push_back(item);
 }
 

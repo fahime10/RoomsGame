@@ -74,6 +74,15 @@ void GameFlow::buildGame(json j) {
     }
 }
 
+void GameFlow::printItems() const {
+    string itemList;
+    for (Item item: items) {
+        itemList += "[" + item.getId() + "]";
+    }
+
+    cout << itemList << endl;
+}
+
 // This is where user input is handled
 void GameFlow::playGame() {
     presentCurrentRoom(p, rooms, items);
@@ -91,15 +100,21 @@ void GameFlow::playGame() {
         strArray.push_back(singleStr);
     }
 
-    Input input;
+    Input enumInput;
 
     while (command != "quit" && command != "q") {
-        input = parseInput(strArray);
-        handleUserInput(input, p, rooms, items);
+        enumInput = parseInput(strArray);
+        handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
 
-        if (input != Input::LOOK && input != Input::UNKNOWN && input != Input::LIST_ITEMS &&
-            input != Input::LIST_EXITS) {
+        for (Item item: items) {
+            cout << item.getId() << endl;
+        }
+
+        
+
+        if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
+            enumInput != Input::LIST_EXITS) {
             presentCurrentRoom(p, rooms, items);
         }
 

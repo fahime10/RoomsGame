@@ -19,7 +19,7 @@ public:
 
     string viewInventory() const;
 
-    void addToInventory(Item);
+    void addToInventory(Item&);
 
     void setCurrentRoom(string);
 
