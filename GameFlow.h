@@ -14,16 +14,27 @@ class GameFlow {
 
         ~GameFlow() = default;
 
+        string getType() const;
+
+        vector<string> getConditions() const; 
+
         void buildGame(json);
 
         void playGame();
 
         void printItems() const;
 
-    private:
-        vector<Room> rooms;
-        vector<Enemy> enemies;
-        vector<Item> items;
+        void setType(string);
 
-        Player p;
+        void setConditions(vector<string>);
+
+    private:
+        vector<Room> rooms_;
+        vector<Enemy> enemies_;
+        vector<Item> items_;
+
+        string type_;
+        vector<string> conditions_;
+
+        Player p_;
 };

@@ -183,13 +183,20 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                     if (p.getCurrentRoom() == enemy.getInitialRoom() &&
                         input[1] == enemy.getId()) {
 
-                        success = all_of(enemy.getKilledBy().begin(), enemy.getKilledBy().end(), [&](const Item& item) {
+                        success = 
+                            all_of(enemy.getKilledBy().begin(), enemy.getKilledBy().end(), [&](const Item& item) {
                             return find(p.getInventory().begin(), p.getInventory().end(), item) != p.getInventory().end();
                         });
 
                         if (success) {
-                            cout << "Enemy " << enemy.getId() << " has been defeated" << endl;
+                            cout << "Enemy " << enemy.getId() << " has been defeated\n" << endl;
                             room.removeEnemy(enemy);
+
+                            auto it = find(enemies.begin(), enemies.end(), enemy);
+                        
+                            if (it != enemies.end()) {
+                                enemies.erase(it);
+                            }
                             break;
                         }
                     }

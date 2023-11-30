@@ -12,7 +12,7 @@ using namespace std;
 using json = nlohmann::json;
 
 void presentCurrentRoom(Player, vector<Room>&, vector<Enemy>&);
-void checkGameOver();
+void checkGameOver(string, vector<string>, Player, vector<Room>&);
 
 // Build all instances of Room, Item, Enemy and Player first, then populate
 // all the Room instances with Item, Enemy and Player as defined in the 
@@ -29,19 +29,19 @@ void GameFlow::buildGame(json j) {
                 keyValues.push_back(map);
             }
             Room r(room["id"], room["desc"], keyValues);
-            rooms.push_back(r);
+            rooms_.push_back(r);
         }
 
         for (auto object: j["objects"]) {
             Item i(object["id"], object["desc"], object["initialroom"]);
-            items.push_back(i);
+            items_.push_back(i);
         }
 
         for (auto enemy: j["enemies"]) {
             vector<Item> killedBy;
 
             for (auto item: enemy["killedby"]) {
-                for (const Item& i: items) {
+                for (const Item& i: items_) {
                     if (i.getId() == item) {
                         Item object(i.getId(), i.getDescription(), i.getInitialRoom());
                         killedBy.push_back(object);
@@ -50,28 +50,38 @@ void GameFlow::buildGame(json j) {
             }
 
             Enemy e(enemy["id"], enemy["desc"], enemy["aggressiveness"], enemy["initialroom"], killedBy);
-            enemies.push_back(e);
+            enemies_.push_back(e);
         }
 
-        p = Player(j["player"]["initialroom"]);
+        p_ = Player(j["player"]["initialroom"]);
 
-        for (Room& room: rooms) {
-            for (Enemy& enemy: enemies) {
+        for (Room& room: rooms_) {
+            for (Enemy& enemy: enemies_) {
                 if (enemy.getInitialRoom() == room.getId()) {
                     room.addEnemy(enemy);
                 }
             }
 
-            for (Item& item: items) {
+            for (Item& item: items_) {
                 if (item.getInitialRoom() == room.getId()) {
                     room.addItem(item);
                 }
             }
 
-            if (p.getInitialRoom() == room.getId()) {
-                p.setCurrentRoom(room.getId());
+            if (p_.getInitialRoom() == room.getId()) {
+                p_.setCurrentRoom(room.getId());
             } 
         }
+
+        setType(j["objective"]["type"]);
+
+        vector<string> conditions;
+        
+        for (auto what: j["objective"]["what"]) {
+            conditions.push_back(what);
+        }
+
+        setConditions(conditions);
 
     } catch (exception ex) {
         cerr << "Error reading file" << endl;
@@ -81,7 +91,7 @@ void GameFlow::buildGame(json j) {
 
 void GameFlow::printItems() const {
     string itemList;
-    for (Item item: items) {
+    for (Item item: items_) {
         itemList += "[" + item.getId() + "]";
     }
 
@@ -90,9 +100,9 @@ void GameFlow::printItems() const {
 
 // Function to play the game and handle all sorts of user input
 void GameFlow::playGame() {
-    presentCurrentRoom(p, rooms, enemies);
+    presentCurrentRoom(p_, rooms_, enemies_);
     
-    string currentRoom = p.getCurrentRoom();
+    string currentRoom = p_.getCurrentRoom();
 
     string command;
 
@@ -112,12 +122,12 @@ void GameFlow::playGame() {
     // This is where user input is handled
     while (command != "quit" && command != "q") {
         enumInput = parseInput(strArray);
-        handleUserInput(strArray, enumInput, p, rooms, items, enemies);
-        checkGameOver();
+        handleUserInput(strArray, enumInput, p_, rooms_, items_, enemies_);
+        checkGameOver(type_, conditions_, p_, rooms_);
 
-        if (p.getCurrentRoom() != currentRoom) {
-            presentCurrentRoom(p, rooms, enemies);
-            currentRoom = p.getCurrentRoom();
+        if (p_.getCurrentRoom() != currentRoom) {
+            presentCurrentRoom(p_, rooms_, enemies_);
+            currentRoom = p_.getCurrentRoom();
         }
 
         getline(cin, command);
@@ -166,6 +176,44 @@ void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Enemy>& enemies) {
 
 // This will constantly check if the player has been defeated by enemy or
 // by soft-locking themselves
-void checkGameOver() {
+void checkGameOver(string type, vector<string> conditions_, Player p, vector<Room>& rooms) {
+    bool win = true;
 
+    if (type == "kill") {
+        for (string& objective: conditions_) {
+            for (Room& room: rooms) {
+                for (const Enemy& enemy: room.getEnemies()) {
+                    if (enemy.getId() == objective) {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+    } else if (type == "collect") {
+
+    } else if (type == "room") {
+        
+    }
+
+    if (win) {
+        cout << "Congratulations! \nYou have completed the map\n" << endl;
+        exit(0);
+    }
+}
+
+string GameFlow::getType() const {
+    return type_;
+}
+
+vector<string> GameFlow::getConditions() const {
+    return conditions_;
+}
+
+void GameFlow::setType(string type) {
+    type_ = type;
+}
+
+void GameFlow::setConditions(vector<string> conditions) {
+    conditions_ = conditions;
 }
