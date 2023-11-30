@@ -21,24 +21,9 @@ string Room::getDescription() const {
     return description_;
 }
 
-// This is used by gameflow for checking if exits requested by user do exits or not, 
-// and which ones
-string Room::getExits() const {
-    if (!exits_.empty()) {
-        string exits;
-
-        exits = "Your exits are: \n";
-
-        for (const auto& map: exits_) {
-            for (const auto& pair: map) {
-                exits += pair.first + ", which goes to " + pair.second + " \n";
-            }
-        }
-
-        return exits;
-    }
-
-    return "No exits";
+// This returns the exits available
+const vector<map<string, string>>& Room::getExits() const {
+    return exits_;
 }
 
 // This is used when user asks for possible exits
@@ -50,7 +35,7 @@ string Room::printExits() const {
     if (!exits_.empty()) {
         for (const auto& map: exits_) {
             for (const auto& pair: map) {
-                exits += pair.second + " \n";
+                exits += pair.first + ", which leads to " + pair.second + " \n";
             }
         }
     } else {

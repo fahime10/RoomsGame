@@ -23,7 +23,7 @@ public:
 
     const vector<Item>& getItems() const;
 
-    string getExits() const;
+    const vector<map<string, string>>& getExits() const;
 
     string getPrevExit() const;
 

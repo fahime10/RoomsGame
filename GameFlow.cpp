@@ -11,7 +11,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-void presentCurrentRoom(Player, vector<Room>&, vector<Item>&);
+void presentCurrentRoom(Player, vector<Room>&, vector<Item>&, vector<Enemy>&);
 void checkGameOver();
 
 // Build all instances of Room, Item, Enemy and Player first, then populate
@@ -85,7 +85,7 @@ void GameFlow::printItems() const {
 
 // Function to play the game and handle all sorts of user input
 void GameFlow::playGame() {
-    presentCurrentRoom(p, rooms, items);
+    presentCurrentRoom(p, rooms, items, enemies);
 
     string command;
 
@@ -108,9 +108,9 @@ void GameFlow::playGame() {
         handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
 
-        // if (enumInput != Input::LOOK && enumInput != Input::UNKNOWN && enumInput != Input::LIST_ITEMS &&
-        //     enumInput != Input::LIST_EXITS && enumInput != Input::TAKE_ITEM) {
-        //     presentCurrentRoom(p, rooms, items);
+        // if (enumInput == Input::MOVE) {
+        //     presentCurrentRoom(p, rooms, items, enemies);
+        //     cout << "\n" << endl;
         // }
 
         getline(cin, command);
@@ -126,7 +126,7 @@ void GameFlow::playGame() {
 }
 
 // This presents the current room the player is at
-void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Item>& items) {
+void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Item>& items, vector<Enemy>& enemies) {
     for (auto room: rooms) {
         if (p.getCurrentRoom() == room.getId()) {
             cout << "\n" << room.getDescription() << endl;

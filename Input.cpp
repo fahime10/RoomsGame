@@ -27,58 +27,15 @@ Input parseInput(const vector<string>& input) {
                 ((input[0] == "list" && input[1] == "exits" && input.size() == 2))) {
         return Input::LIST_EXITS;
 
+    } else if ((input[0] == "go" || input[0] == "move") && input.size() == 2) {
+        return Input::MOVE;
+
     } else if (((input[0] == "q" || input[0] == "quit") && input.size() == 1) ||
                 (input[0] == "quit" && input[1] == "game" && input.size() == 2)) {
         return Input::QUIT;
-    } else if ((input[0] == "go" || input[0] == "move") && input.size() == 2) {
-        return Input::MOVE;
-    }
+    } 
     
     return Input::UNKNOWN;
-}
-
-void movePlayer(Player& p, const string& direction, vector<Room>& rooms) {
-    string currentRoomId = p.getCurrentRoom();
-
-    for (const auto& room : rooms) {
-        if (currentRoomId == room.getId()) {
-            // Find the position of the specified direction in the exits description of the room
-            auto pos = room.getExits().find(direction);
-
-            // Check if the specified direction is found in the exits description
-            if (pos != string::npos) {
-                // Find the position of "goes to" in the exits description, starting from the position of the direction
-                auto arrowPos = room.getExits().find("goes to", pos);
-
-                // Find the position of the newline character after "goes to"
-                auto newlinePos = room.getExits().find("\n", arrowPos);
-
-                // Check if both "goes to" and the newline character are found
-                if (arrowPos != string::npos && newlinePos != string::npos) {
-                    // Extract the exit room ID from the exits description
-                    string exitRoom = room.getExits().substr(arrowPos + 8, newlinePos - arrowPos - 8);
-
-                    // Set the player's current room to the exit room
-                    p.setCurrentRoom(exitRoom);
-
-                    // Print a message indicating that the player has moved in the specified direction
-                    cout << "You have moved " << direction << ".\n" << endl;
-
-                    // Exit the function
-                    return;
-                }
-            }
-
-            // If the specified direction is not found in the exits description, print an error message
-            cout << "There is no exit in the " << direction << " direction.\n" << endl;
-
-            // Exit the function
-            return;
-        }
-    }
-
-    // If the current room ID is not found, print an error message
-    cout << "Error: Current room not found.\n" << endl;
 }
 
 void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items) {
@@ -96,7 +53,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
                 itemList = "There are items in this room: \n" + room.printItems();
             } 
             
-            exits = room.getExits();
+            exits = room.printExits();
         }
     }
 
@@ -177,7 +134,36 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
         case Input::MOVE:
             if (input.size() == 2) {
                 string direction = input[1];
-                movePlayer(p, direction, rooms);
+                bool movePossible = false;
+                string newRoom = "";
+
+                for (Room& room: rooms) {
+                    if (p.getCurrentRoom() == room.getId()) {
+                        for (auto& map: room.getExits()) {
+                            for (auto& keyValue: map) {
+                                if (keyValue.first == direction) {
+                                    movePossible = true;
+                                    newRoom = keyValue.second;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (movePossible) {
+                    for (Room& room: rooms) {
+                        if (room.getId() == newRoom) {
+                            p.setCurrentRoom(room.getId());
+                            cout << "You moved in " << newRoom << endl;
+                            cout << room.getDescription() << "\n" << endl;
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "Move not possible\n" << endl;
+                }
+
             } else {
                 cout << "Invalid move command. Usage: go <direction>.\n" << endl;
             }

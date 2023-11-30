@@ -13,12 +13,7 @@ enum class Input {
     TAKE_ITEM,
     CHECK_ITEM,
     LIST_EXITS,
-    GO_LEFT,
-    GO_UP,
     MOVE,
-    GO_RIGHT,
-    GO_DOWN,
-    GO_BACK,
     QUIT,
     UNKNOWN
 };
