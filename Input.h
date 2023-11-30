@@ -14,13 +14,15 @@ enum class Input {
     CHECK_ITEM,
     LIST_EXITS,
     MOVE,
+    ATTACK,
     QUIT,
     UNKNOWN
 };
 
 Input parseInput(const vector<string>& input);
 
-void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items);
+void handleUserInput(vector<string> input, Input enumInput, Player& p, 
+                     vector<Room>& rooms, vector<Item>& items, vector<Enemy>& enemies);
 
 
 #endif // INPUT_H

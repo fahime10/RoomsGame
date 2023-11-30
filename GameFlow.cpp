@@ -32,19 +32,25 @@ void GameFlow::buildGame(json j) {
             rooms.push_back(r);
         }
 
-        for (auto enemy: j["enemies"]) {
-            vector<string> killedBy;
-
-            for (auto item: enemy["killedby"]) {
-                killedBy.push_back(item);
-            }
-            Enemy e(enemy["id"], enemy["desc"], enemy["aggressiveness"], enemy["initialroom"], killedBy);
-            enemies.push_back(e);
-        }
-
         for (auto object: j["objects"]) {
             Item i(object["id"], object["desc"], object["initialroom"]);
             items.push_back(i);
+        }
+
+        for (auto enemy: j["enemies"]) {
+            vector<Item> killedBy;
+
+            for (auto item: enemy["killedby"]) {
+                for (const Item& i: items) {
+                    if (i.getId() == item) {
+                        Item object(i.getId(), i.getDescription(), i.getInitialRoom());
+                        killedBy.push_back(object);
+                    }
+                }
+            }
+
+            Enemy e(enemy["id"], enemy["desc"], enemy["aggressiveness"], enemy["initialroom"], killedBy);
+            enemies.push_back(e);
         }
 
         p = Player(j["player"]["initialroom"]);
@@ -106,7 +112,7 @@ void GameFlow::playGame() {
     // This is where user input is handled
     while (command != "quit" && command != "q") {
         enumInput = parseInput(strArray);
-        handleUserInput(strArray, enumInput, p, rooms, items);
+        handleUserInput(strArray, enumInput, p, rooms, items, enemies);
         checkGameOver();
 
         if (p.getCurrentRoom() != currentRoom) {
@@ -145,7 +151,12 @@ void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Enemy>& enemies) {
                         cout << "[ " << enemy.getId() << " ]" << endl;
                         cout << enemy.getDescription() << endl;
                         cout << "It can be killed by: " << endl;
-                        cout << enemy.printKilledBy() << "\n" <<  endl;
+
+                        if (enemy.getKilledBy().empty()) {
+                            cout << "[ Bare hands ]" << endl;
+                        } else {
+                            cout << enemy.printKilledBy() << "\n" <<  endl;
+                        }
                     }
                 }
             }

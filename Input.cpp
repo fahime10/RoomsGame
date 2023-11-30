@@ -30,15 +30,16 @@ Input parseInput(const vector<string>& input) {
     } else if ((input[0] == "go" || input[0] == "move") && input.size() == 2) {
         return Input::MOVE;
 
-    } else if (((input[0] == "q" || input[0] == "quit") && input.size() == 1) ||
-                (input[0] == "quit" && input[1] == "game" && input.size() == 2)) {
-        return Input::QUIT;
-    } 
+    } else if ((input[0] == "attack" || input[0] == "kill") && input.size() == 2) {
+        return Input::ATTACK;
+
+    }
     
     return Input::UNKNOWN;
 }
 
-void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Room>& rooms, vector<Item>& items) {
+void handleUserInput(vector<string> input, Input enumInput, Player& p, 
+                     vector<Room>& rooms, vector<Item>& items, vector<Enemy>& enemies) {
     string currentRoomDesc;
     string exits;
     string itemList;
@@ -135,7 +136,6 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
             } else {
                 cout << "Item not found\n" << endl;
             }
-
             break;
         
         case Input::MOVE:
@@ -172,6 +172,33 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
 
             } else {
                 cout << "Invalid move command. Usage: go <direction>.\n" << endl;
+            }
+            break;
+
+        case Input::ATTACK:
+            bool success;
+
+            for (Room& room: rooms) {
+                for (const Enemy& enemy: room.getEnemies()) {
+                    if (p.getCurrentRoom() == enemy.getInitialRoom() &&
+                        input[1] == enemy.getId()) {
+
+                        success = all_of(enemy.getKilledBy().begin(), enemy.getKilledBy().end(), [&](const Item& item) {
+                            return find(p.getInventory().begin(), p.getInventory().end(), item) != p.getInventory().end();
+                        });
+
+                        if (success) {
+                            cout << "Enemy " << enemy.getId() << " has been defeated" << endl;
+                            room.removeEnemy(enemy);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!success) {
+                cout << "You do not have enough items. \nYou have been defeated" << endl;
+                exit(0);
             }
             break;
 

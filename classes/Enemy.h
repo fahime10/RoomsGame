@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Item.h"
 
 using namespace std;
 
@@ -10,7 +11,7 @@ class Enemy {
 public:
     // Constructor
     Enemy(const string id, const string desc, int aggressiveness,
-          const string initialRoom, const vector<string> killedBy);
+          const string initialRoom, const vector<Item> killedBy);
 
     // Destructor
     ~Enemy() = default;
@@ -24,6 +25,8 @@ public:
     string getInitialRoom() const;
     string printKilledBy() const;
 
+    const vector<Item>& getKilledBy() const;
+
     // Member functions
     bool attackPlayer() const;
     void printAttackMessage() const;
@@ -34,7 +37,7 @@ private:
     string description_;
     int aggressiveness_;
     string initial_room;
-    vector<string> killed_by;
+    vector<Item> killed_by;
 };
 
 #endif // ENEMY_H
