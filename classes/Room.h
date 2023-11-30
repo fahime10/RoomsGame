@@ -39,7 +39,7 @@ public:
 
     string printItems() const;
 
-    void printEnemies() const;
+    string printEnemies() const;
 
     void setPlayerLocation();
 

@@ -49,11 +49,11 @@ string Enemy::getInitialRoom() const {
 }
 
 // Getter function to get the list of objects that can kill the enemy
-string Enemy::getKilledBy() const {
+string Enemy::printKilledBy() const {
     string items;
     
     for (string item: killed_by) {
-        items += item + " \n";
+        items += "[ " + item + " ] \n";
     }
     
     return items;

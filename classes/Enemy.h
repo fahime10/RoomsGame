@@ -22,7 +22,7 @@ public:
     string getDescription() const;
     int getAggressiveness() const;
     string getInitialRoom() const;
-    string getKilledBy() const;
+    string printKilledBy() const;
 
     // Member functions
     bool attackPlayer() const;

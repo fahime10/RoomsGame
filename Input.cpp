@@ -42,7 +42,9 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
     string currentRoomDesc;
     string exits;
     string itemList;
+    string enemyList;
     bool anyItem;
+    bool anyEnemy;
 
     for (const auto& room : rooms) {
         if (p.getCurrentRoom() == room.getId()) {
@@ -51,6 +53,11 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
             if (!(room.getItems().empty())) {
                 anyItem = true;
                 itemList = "There are items in this room: \n" + room.printItems();
+            } 
+
+            if (!(room.getEnemies().empty())) {
+                anyEnemy = true;
+                enemyList = "There are enemies in this room: \n" + room.printEnemies();
             } 
             
             exits = room.printExits();
@@ -156,7 +163,6 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p, vector<Ro
                         if (room.getId() == newRoom) {
                             p.setCurrentRoom(room.getId());
                             cout << "You moved in " << newRoom << endl;
-                            cout << room.getDescription() << "\n" << endl;
                             break;
                         }
                     }

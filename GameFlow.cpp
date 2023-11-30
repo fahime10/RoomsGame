@@ -11,7 +11,7 @@
 using namespace std;
 using json = nlohmann::json;
 
-void presentCurrentRoom(Player, vector<Room>&, vector<Item>&, vector<Enemy>&);
+void presentCurrentRoom(Player, vector<Room>&, vector<Enemy>&);
 void checkGameOver();
 
 // Build all instances of Room, Item, Enemy and Player first, then populate
@@ -63,7 +63,6 @@ void GameFlow::buildGame(json j) {
             }
 
             if (p.getInitialRoom() == room.getId()) {
-                room.setPlayerLocation();
                 p.setCurrentRoom(room.getId());
             } 
         }
@@ -85,7 +84,9 @@ void GameFlow::printItems() const {
 
 // Function to play the game and handle all sorts of user input
 void GameFlow::playGame() {
-    presentCurrentRoom(p, rooms, items, enemies);
+    presentCurrentRoom(p, rooms, enemies);
+    
+    string currentRoom = p.getCurrentRoom();
 
     string command;
 
@@ -108,10 +109,10 @@ void GameFlow::playGame() {
         handleUserInput(strArray, enumInput, p, rooms, items);
         checkGameOver();
 
-        // if (enumInput == Input::MOVE) {
-        //     presentCurrentRoom(p, rooms, items, enemies);
-        //     cout << "\n" << endl;
-        // }
+        if (p.getCurrentRoom() != currentRoom) {
+            presentCurrentRoom(p, rooms, enemies);
+            currentRoom = p.getCurrentRoom();
+        }
 
         getline(cin, command);
 
@@ -126,14 +127,27 @@ void GameFlow::playGame() {
 }
 
 // This presents the current room the player is at
-void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Item>& items, vector<Enemy>& enemies) {
-    for (auto room: rooms) {
+void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Enemy>& enemies) {
+    for (Room& room: rooms) {
         if (p.getCurrentRoom() == room.getId()) {
             cout << "\n" << room.getDescription() << endl;
 
             if (!room.getItems().empty()) {
                 cout << "There are items in this room: " << endl;
                 cout << room.printItems() << "\n" << endl;
+            }
+
+            if (!room.getEnemies().empty()) {
+                cout << "There are enemies in this room: " << endl;
+                
+                for (Enemy& enemy: enemies) {
+                    if (enemy.getInitialRoom() == room.getId()) {
+                        cout << "[ " << enemy.getId() << " ]" << endl;
+                        cout << enemy.getDescription() << endl;
+                        cout << "It can be killed by: " << endl;
+                        cout << enemy.printKilledBy() << "\n" <<  endl;
+                    }
+                }
             }
         }
     }

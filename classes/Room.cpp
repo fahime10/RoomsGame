@@ -54,14 +54,14 @@ const vector<Enemy>& Room::getEnemies() const {
     return enemies_;
 }
 
-void Room::printEnemies() const {
+string Room::printEnemies() const {
     string enemies;
     
     for (auto enemy: enemies_) {
-        enemies += enemy.getId() + " \n";
+        enemies += "[ " + enemy.getId() + " ]" + " \n";
     }
     
-    cout << enemies << endl;
+    return enemies;
 }
 
 const vector<Item>& Room::getItems() const {
