@@ -13,7 +13,7 @@ public:
     // Destructor
     ~Item() = default;
 
-    Item& operator=(const Item& other);
+    //Item& operator=(const Item& other);
 
     bool operator==(const Item& other) const;
 

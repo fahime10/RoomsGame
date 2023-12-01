@@ -11,15 +11,15 @@ Item::Item(const string id, const string desc, const string initialRoom) {
     initial_room = initialRoom;
 }
 
-Item& Item::operator=(const Item& other) {
-    if (this != &other) {
-        this->id_ = other.id_;
-        this->description_ = other.description_;
-        this->initial_room = other.initial_room;
-    }
+// Item& Item::operator=(const Item& other) {
+//     if (this != &other) {
+//         this->id_ = other.id_;
+//         this->description_ = other.description_;
+//         this->initial_room = other.initial_room;
+//     }
 
-    return *this;
-}
+//     return *this;
+// }
 
 // Operator == overloaded to help with iterator
 bool Item::operator==(const Item& other) const {

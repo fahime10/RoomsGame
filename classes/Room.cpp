@@ -71,8 +71,8 @@ const vector<Item>& Room::getItems() const {
 string Room::printItems() const {
     string items;
 
-    for (auto item: items_) {
-        items += "[ " + item.getId() + " ] ";
+    for (const Item& item: items_) {
+        items += "[ " + item.getId() + " ] \n";
     }
 
     return items;

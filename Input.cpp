@@ -16,7 +16,7 @@ Input parseInput(const vector<string>& input) {
                 ((input[0] == "check" || input [0] == "view") && input[1] == "inventory" && input.size() == 2)) {
         return Input::LIST_ITEMS;
 
-    } else if ((input[0] == "grab" || input[0] == "take" || input[0] == "pick") && input.size() == 2) {
+    } else if ((input[0] == "grab" || input[0] == "take" || input[0] == "pick")) {
         return Input::TAKE_ITEM;
 
     } else if (((input[0] == "check" || input[0] == "see") && input.size() == 2) ||
@@ -30,7 +30,7 @@ Input parseInput(const vector<string>& input) {
     } else if ((input[0] == "go" || input[0] == "move") && input.size() == 2) {
         return Input::MOVE;
 
-    } else if ((input[0] == "attack" || input[0] == "kill") && input.size() == 2) {
+    } else if ((input[0] == "attack" || input[0] == "kill")) {
         return Input::ATTACK;
 
     }
@@ -81,18 +81,21 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
         case Input::TAKE_ITEM:
             if (anyItem) {
-                string requestedItem = input[1];
+                string requestedItem = "";
+
+                for (int i = 1; i < input.size(); i++) {
+                    if (i + 1 == input.size()) {
+                        requestedItem += input[i];
+                    } else {
+                        requestedItem += input[i] + " ";   
+                    }
+                }
+                
                 string foundItem = "";
 
                 for (Item& item: items) {
                     if (requestedItem == item.getId()) {
                         p.addToInventory(item);
-
-                        auto it = find(items.begin(), items.end(), item);
-                        
-                        if (it != items.end()) {
-                            items.erase(it);
-                        }
 
                         for (Room& room: rooms) {
                             if (room.getId() == item.getInitialRoom()) {
@@ -100,6 +103,12 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                                 foundItem = "You have taken: " + requestedItem + "\n";
                                 break;
                             }
+                        }
+
+                        auto it = find(items.begin(), items.end(), item);
+                        
+                        if (it != items.end()) {
+                            items.erase(it);
                         }
                         break;
                     }

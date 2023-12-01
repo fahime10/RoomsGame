@@ -163,7 +163,7 @@ void presentCurrentRoom(Player p, vector<Room>& rooms, vector<Enemy>& enemies) {
                         cout << "It can be killed by: " << endl;
 
                         if (enemy.getKilledBy().empty()) {
-                            cout << "[ Bare hands ]" << endl;
+                            cout << "[ Bare hands ] \n" << endl;
                         } else {
                             cout << enemy.printKilledBy() << "\n" <<  endl;
                         }
@@ -193,7 +193,7 @@ void checkGameOver(string type, vector<string> conditions_, Player p, vector<Roo
     } else if (type == "collect") {
 
     } else if (type == "room") {
-        
+
     }
 
     if (win) {
