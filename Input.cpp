@@ -66,7 +66,8 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
     }
 
     switch (enumInput) {
-        case Input::LOOK:
+        case Input::LOOK: 
+        {
             if (anyItem) {
                 cout << currentRoomDesc << endl;
                 cout << itemList << "\n" << endl;
@@ -74,12 +75,16 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 cout << currentRoomDesc << "\n" << endl;
             }
             break;
+        }
 
         case Input::LIST_ITEMS:
+        {
             cout << p.viewInventory() << "\n" << endl;
             break;
+        }
 
         case Input::TAKE_ITEM:
+        {
             if (anyItem) {
                 string requestedItem = "";
 
@@ -124,8 +129,10 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 cout << "Item not found\n" << endl;
             }
             break;
+        }
 
         case Input::CHECK_ITEM:
+        {
             if (!p.getInventory().empty()) {
                 string object = "";
 
@@ -146,8 +153,10 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 cout << "Item not found\n" << endl;
             }
             break;
+        }
         
         case Input::MOVE:
+        {
             if (input.size() == 2) {
                 string direction = input[1];
                 bool movePossible = false;
@@ -183,18 +192,30 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 cout << "Invalid move command. Usage: go <direction>.\n" << endl;
             }
             break;
+        }
 
         case Input::ATTACK:
+        {
             bool success;
+            string requestedEnemy = "";
+            string enemyFound = "";
+
+            for (int i = 1; i < input.size(); i++) {
+                if (i + 1 == input.size()) {
+                    requestedEnemy += input[i];
+                } else {
+                    requestedEnemy += input[i] + " ";   
+                }
+            }
 
             for (Room& room: rooms) {
                 for (const Enemy& enemy: room.getEnemies()) {
-                    if (p.getCurrentRoom() == enemy.getInitialRoom() &&
-                        input[1] == enemy.getId()) {
-
+                    if (p.getCurrentRoom() == enemy.getInitialRoom() && enemy.getId() == requestedEnemy) {
+                        enemyFound = enemy.getId();
                         success = 
                             all_of(enemy.getKilledBy().begin(), enemy.getKilledBy().end(), [&](const Item& item) {
-                            return find(p.getInventory().begin(), p.getInventory().end(), item) != p.getInventory().end();
+                            return 
+                            find(p.getInventory().begin(), p.getInventory().end(), item) != p.getInventory().end();
                         });
 
                         if (success) {
@@ -212,18 +233,26 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 }
             }
 
-            if (!success) {
+            if (enemyFound.empty()) {
+                cout << "Instruction not understood\n" << endl;
+            } else if (!success) {
                 cout << "You do not have enough items. \nYou have been defeated" << endl;
                 exit(0);
             }
             break;
+        }
+
 
         case Input::LIST_EXITS:
+        {
             cout << exits << endl;
             break;
+        }
 
         case Input::UNKNOWN:
+        {
             cout << "Instruction not understood" << "\n" << endl;
             break;
+        }
     }
 }

@@ -1,12 +1,6 @@
-#include <iostream>
-#include <vector>
 #include <map>
 #include "json.hpp"
 #include "GameFlow.h"
-#include "classes/Item.h"
-#include "classes/Room.h"
-#include "classes/Player.h"
-#include "classes/Enemy.h"
 #include "Input.h"
 using namespace std;
 using json = nlohmann::json;
@@ -191,6 +185,17 @@ void checkGameOver(string type, vector<string> conditions_, Player p, vector<Roo
             }
         }
     } else if (type == "collect") {
+        for (string& objective: conditions_) {
+            for (Room& room: rooms) {
+                for (const Item& item: room.getItems()) {
+                    if (item.getId() == objective) {
+                        win = false;
+                        break;
+                    }
+                }
+            }
+        }
+
 
     } else if (type == "room") {
         for (string& objective: conditions_) {
@@ -200,15 +205,15 @@ void checkGameOver(string type, vector<string> conditions_, Player p, vector<Roo
         }
     }
 
-    for (Room& room: rooms) {
-        if (p.getCurrentRoom() == room.getId()) {
-            if (room.getExits().empty()) {
-                cout << room.getDescription() << "\n" << endl;
-                cout << "Unfortunately, there are no exits from this room. Game  over.\n" << endl;
-                exit(0); 
-            }
-        }
-    }
+    // for (Room& room: rooms) {
+    //     if (p.getCurrentRoom() == room.getId()) {
+    //         if (room.getExits().empty()) {
+    //             cout << room.getDescription() << "\n" << endl;
+    //             cout << "Unfortunately, there are no exits from this room. Game  over.\n" << endl;
+    //             exit(0); 
+    //         }
+    //     }
+    // }
 
     if (win) {
         cout << "Congratulations! \nYou have completed the map\n" << endl;
