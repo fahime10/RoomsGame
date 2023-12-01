@@ -193,7 +193,21 @@ void checkGameOver(string type, vector<string> conditions_, Player p, vector<Roo
     } else if (type == "collect") {
 
     } else if (type == "room") {
+        for (string& objective: conditions_) {
+            if (p.getCurrentRoom() != objective) {
+                win = false;
+            }
+        }
+    }
 
+    for (Room& room: rooms) {
+        if (p.getCurrentRoom() == room.getId()) {
+            if (room.getExits().empty()) {
+                cout << room.getDescription() << "\n" << endl;
+                cout << "Unfortunately, there are no exits from this room. Game  over.\n" << endl;
+                exit(0); 
+            }
+        }
     }
 
     if (win) {
