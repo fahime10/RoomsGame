@@ -154,78 +154,46 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
             break;
         }
         
-case Input::MOVE: {
-    if (input.size() == 2) {
-        string direction = input[1];
-        bool movePossible = false;
-        string newRoom = "";
-        bool leftRoomWithEnemies = false; // Track if the player left a room with enemies
+        case Input::MOVE: {
+            if (input.size() == 2) {
+                string direction = input[1];
+                bool movePossible = false;
+                string newRoom = "";
 
-        auto roomIt = rooms.find(p.getCurrentRoom());
-        if (roomIt != rooms.end()) {
-            const Room& currentRoom = roomIt->second;
-
-            auto exitIt = currentRoom.getExits().find(direction);
-            if (exitIt != currentRoom.getExits().end()) {
-                movePossible = true;
-                newRoom = exitIt->second;
-            }
-        }
-
-        if (movePossible) {
-            auto roomIt = rooms.find(newRoom);
-            if (roomIt != rooms.end()) {
-                const Room& room = roomIt->second;
-
-                int aggressiveness;
-
-                // Check if there were enemies in the previous room
-                if (!rooms[p.getCurrentRoom()].getEnemies().empty()) {
-                    // Determine if the enemy is aggressive
+                if (anyEnemy) {
                     int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
-                    
+                    cout << "Chance of survival: " << (100 - aggressiveness) << " %" << endl;
 
-                    leftRoomWithEnemies = true; // Set the flag
-                }
+                    int chance = getRandomNumber(0, 100);
 
-                // Check if the player left a room with enemies and is entering a new room
-                if (leftRoomWithEnemies) {
-                    // There's a chance the player dies
-                    int playerDeadChance = getRandomNumber(0, 100);
-
-                    int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
-                    cout << "Chance a player dies (in %): " << playerDeadChance << endl;
-
-                     
-                    cout << "Aggressiveness: " << aggressiveness << endl;
-
-                    if (playerDeadChance > aggressiveness) { // Adjust the threshold as needed
-                        cout << "Oh no! An aggressive enemy caught you. You have died." << endl;
+                    if (chance < aggressiveness) {
+                        cout << "Enemy has attacked you. You have been defeated\n" << endl;
                         exit(0);
                     }
-
-                    leftRoomWithEnemies = false; // Reset the flag
                 }
 
-                p.setCurrentRoom(room.getId());
-                cout << "You moved to " << newRoom << endl;
+                auto roomIt = rooms.find(p.getCurrentRoom());
+                if (roomIt != rooms.end()) {
+                    const Room& currentRoom = roomIt->second;
+
+                    auto exitIt = currentRoom.getExits().find(direction);
+                    if (exitIt != currentRoom.getExits().end()) {
+                        movePossible = true;
+                        newRoom = exitIt->second;
+                    }
+                }
+
+                if (movePossible) {
+                    p.setCurrentRoom(newRoom);
+                    cout << "You moved to " << newRoom << endl;
+                } else {
+                    cout << "Instruction not understood\n" << endl;
+                }
             } else {
-                cout << "Error: Room not found.\n" << endl;
+                cout << "Invalid direction. Cannot move in that direction.\n" << endl;
             }
-        } else {
-            cout << "Invalid direction. Cannot move in that direction.\n" << endl;
+            break;
         }
-    } else {
-        cout << "Invalid move command. Usage: go <direction>.\n" << endl;
-    }
-
-    break;
-}
-
-
-
-
-
 
         case Input::ATTACK:
         {
