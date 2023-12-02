@@ -159,6 +159,7 @@ case Input::MOVE: {
         string direction = input[1];
         bool movePossible = false;
         string newRoom = "";
+        bool leftRoomWithEnemies = false; // Track if the player left a room with enemies
 
         auto roomIt = rooms.find(p.getCurrentRoom());
         if (roomIt != rooms.end()) {
@@ -171,38 +172,40 @@ case Input::MOVE: {
             }
         }
 
-
-
         if (movePossible) {
             auto roomIt = rooms.find(newRoom);
             if (roomIt != rooms.end()) {
                 const Room& room = roomIt->second;
 
-                    int aggressiveness;
-                    int playerDeadChance;
+                int aggressiveness;
 
-
-                if (!room.getEnemies().empty()) {
+                // Check if there were enemies in the previous room
+                if (!rooms[p.getCurrentRoom()].getEnemies().empty()) {
                     // Determine if the enemy is aggressive
-                        aggressiveness = room.getEnemies().begin()->second.getAggressiveness();
-                        
-
-                } else {
-                    cout << "No enemies in the room." << endl;
-                    // Use stored values when there are no enemies
-                    playerDeadChance = getRandomNumber(0, 100);
-                   cout << "Chance a player dies (in %): " << playerDeadChance << endl;
-                    cout << "Aggresiveness: " << aggressiveness << endl;
+                    int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
                     
-                    if (playerDeadChance > aggressiveness) {
-                        cout << "Oh no! An aggressive enemy caught you. You have died." << endl;
-                        return;
-                        } else {
-                            cout << "You narrowly escaped the aggressive enemy." << endl;
-                        }
+
+                    leftRoomWithEnemies = true; // Set the flag
                 }
 
+                // Check if the player left a room with enemies and is entering a new room
+                if (leftRoomWithEnemies) {
+                    // There's a chance the player dies
+                    int playerDeadChance = getRandomNumber(0, 100);
 
+                    int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
+                    cout << "Chance a player dies (in %): " << playerDeadChance << endl;
+
+                     
+                    cout << "Aggressiveness: " << aggressiveness << endl;
+
+                    if (playerDeadChance > aggressiveness) { // Adjust the threshold as needed
+                        cout << "Oh no! An aggressive enemy caught you. You have died." << endl;
+                        exit(0);
+                    }
+
+                    leftRoomWithEnemies = false; // Reset the flag
+                }
 
                 p.setCurrentRoom(room.getId());
                 cout << "You moved to " << newRoom << endl;
