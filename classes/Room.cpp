@@ -7,7 +7,7 @@ using namespace std;
 
 // Anytime a Room instance is created, we do not know items and enemies beforehand, as those
 // are created after rooms, and then assigned to rooms
-Room::Room(string id, string description, vector<map<string, string>> exits) {
+Room::Room(string id, string description, map<string, string> exits) {
     id_ = id;
     description_ = description;
     exits_ = exits;
@@ -22,7 +22,7 @@ string Room::getDescription() const {
 }
 
 // This returns the exits available
-const vector<map<string, string>>& Room::getExits() const {
+const map<string, string>& Room::getExits() const {
     return exits_;
 }
 
@@ -34,9 +34,7 @@ string Room::printExits() const {
 
     if (!exits_.empty()) {
         for (const auto& map: exits_) {
-            for (const auto& pair: map) {
-                exits += pair.first + ", which leads to " + pair.second + " \n";
-            }
+            exits += map.first + ", which leads to " + map.second + " \n";
         }
     } else {
         exits += "There are no exits";
@@ -50,7 +48,7 @@ string Room::getPrevExit() const {
     return prev_exit;
 }
 
-const vector<Enemy>& Room::getEnemies() const {
+const map<string, Enemy>& Room::getEnemies() const {
     return enemies_;
 }
 
@@ -58,21 +56,21 @@ string Room::printEnemies() const {
     string enemies;
     
     for (auto enemy: enemies_) {
-        enemies += "[ " + enemy.getId() + " ]" + " \n";
+        enemies += "[ " + enemy.second.getId() + " ]" + " \n";
     }
     
     return enemies;
 }
 
-const vector<Item>& Room::getItems() const {
+const map<string, Item>& Room::getItems() const {
     return items_;
 }
 
 string Room::printItems() const {
     string items;
 
-    for (const Item& item: items_) {
-        items += "[ " + item.getId() + " ] \n";
+    for (const auto& item: items_) {
+        items += "[ " + item.second.getId() + " ] \n";
     }
 
     return items;
@@ -80,12 +78,12 @@ string Room::printItems() const {
 
 // Function to be used in gameflow, add items one by one
 void Room::addItem(Item& item) {
-    items_.push_back(item);
+    items_[item.getId()] = item;
 }
 
 // Function that runs iterator to remove specific item by reference
-void Room::removeItem(const Item& item) {
-    auto it = find(items_.begin(), items_.end(), item);
+void Room::removeItem(const string& item) {
+    auto it = items_.find(item);
 
     if (it != items_.end()) {
         items_.erase(it);
@@ -94,12 +92,12 @@ void Room::removeItem(const Item& item) {
 
 // Function to be used in gameflow, add enemies one by one
 void Room::addEnemy(Enemy& enemy) {
-    enemies_.push_back(enemy);
+    enemies_[enemy.getId()] = enemy;
 }
 
 // Function that runs iterator to remove specific enemy by reference
-void Room::removeEnemy(const Enemy& enemy) {
-    auto it = find(enemies_.begin(), enemies_.end(), enemy);
+void Room::removeEnemy(const string& enemy) {
+    auto it = enemies_.find(enemy);
 
     if (it != enemies_.end()) {
         enemies_.erase(it);

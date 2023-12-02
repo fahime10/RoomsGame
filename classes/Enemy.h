@@ -3,15 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include "Item.h"
 
 using namespace std;
 
 class Enemy {
 public:
+    Enemy() = default;
+
     // Constructor
-    Enemy(const string id, const string desc, int aggressiveness,
-          const string initialRoom, const vector<Item> killedBy);
+    Enemy(string id, string desc, int aggressiveness, string initialRoom, map<string, Item> killedBy);
 
     // Destructor
     ~Enemy() = default;
@@ -25,7 +27,7 @@ public:
     string getInitialRoom() const;
     string printKilledBy() const;
 
-    const vector<Item>& getKilledBy() const;
+    const map<string, Item>& getKilledBy() const;
 
     // Member functions
     bool attackPlayer() const;
@@ -37,7 +39,7 @@ private:
     string description_;
     int aggressiveness_;
     string initial_room;
-    vector<Item> killed_by;
+    map<string, Item> killed_by;
 };
 
 #endif // ENEMY_H

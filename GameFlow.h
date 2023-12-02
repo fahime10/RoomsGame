@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <map>
 #include "json.hpp"
 #include "classes/Room.h"
 #include "classes/Enemy.h"
@@ -29,9 +30,9 @@ class GameFlow {
         void setConditions(vector<string>);
 
     private:
-        vector<Room> rooms_;
-        vector<Enemy> enemies_;
-        vector<Item> items_;
+        map<string, Room> rooms_;
+        map<string, Enemy> enemies_;
+        map<string, Item> items_;
 
         string type_;
         vector<string> conditions_;

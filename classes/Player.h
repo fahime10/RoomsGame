@@ -2,12 +2,13 @@
 #define PLAYER_H
 
 #include "Item.h"
-#include <vector>
+#include <map>
 using namespace std;
 
 class Player {
 public:
     Player() = default;
+    
     Player(string);
 
     ~Player() = default;
@@ -18,7 +19,7 @@ public:
 
     string viewInventory() const;
 
-    const vector<Item>& getInventory() const;
+    const map<string, Item> getInventory() const;
 
     void addToInventory(Item&);
 
@@ -27,7 +28,7 @@ public:
 private:
     string initial_room;
     string current_room;
-    vector<Item> inventory_;
+    map<string, Item> inventory_;
 };
 
 #endif // PLAYER_H

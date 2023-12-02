@@ -7,13 +7,15 @@ using namespace std;
 
 class Item {
 public:
+    Item() = default;
+
     // Constructor
     Item(const string id, const string desc, const string initialRoom);
 
     // Destructor
     ~Item() = default;
 
-    //Item& operator=(const Item& other);
+    Item& operator=(const Item& other);
 
     bool operator==(const Item& other) const;
 

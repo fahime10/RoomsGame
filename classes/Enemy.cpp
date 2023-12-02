@@ -6,19 +6,13 @@
 using namespace std;
 
 //Constructor implementation
-Enemy::Enemy(const string id, const string desc, int aggressiveness, const string initialRoom, const vector<Item> killedBy) {
+Enemy::Enemy(string id, string desc, int aggressiveness, string initialRoom, map<string, Item> killedBy) {
     id_ = id;
     description_ = desc;
     aggressiveness_ = aggressiveness;
     initial_room = initialRoom;
     killed_by = killedBy;
 }
-
-
-// // Destructor implementation
-// Enemy::~Enemy() {
-    
-// }
 
 // Operator == overloaded to help with iterator
 bool Enemy::operator==(const Enemy& other) const {
@@ -49,7 +43,7 @@ string Enemy::getInitialRoom() const {
 }
 
 // Getter function to get the items required to defeat enemy
-const vector<Item>& Enemy::getKilledBy() const {
+const map<string, Item>& Enemy::getKilledBy() const {
     return killed_by;
 }
 
@@ -57,8 +51,8 @@ const vector<Item>& Enemy::getKilledBy() const {
 string Enemy::printKilledBy() const {
     string items;
     
-    for (const Item& item: killed_by) {
-        items += "[ " + item.getId() + " ] \n";
+    for (const auto& item: killed_by) {
+        items += "[ " + item.second.getId() + " ] \n";
     }
     
     return items;
