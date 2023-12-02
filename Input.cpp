@@ -2,7 +2,11 @@
 #include "Input.h"
 #include "GameFlow.h"
 #include <algorithm>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
+
+
 
 // This is required to work with switch statements
 // Some strings/commands could be regarded as the same enum
@@ -37,6 +41,12 @@ Input parseInput(const vector<string>& input) {
     }
     
     return Input::UNKNOWN;
+}
+
+
+int getRandomNumber(int min, int max) {
+    std::srand(std::time(0)); // Seed the random number generator with the current time
+    return std::rand() % (max - min + 1) + min;
 }
 
 void handleUserInput(vector<string> input, Input enumInput, Player& p, 
@@ -144,33 +154,75 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
             break;
         }
         
-        case Input::MOVE:
-        {
-            if (input.size() == 2) {
-                string direction = input[1];
-                bool movePossible = false;
-                bool success;
+case Input::MOVE: {
+    if (input.size() == 2) {
+        string direction = input[1];
+        bool movePossible = false;
+        string newRoom = "";
 
-                movePossible = rooms[direction].getId() == direction;
+        auto roomIt = rooms.find(p.getCurrentRoom());
+        if (roomIt != rooms.end()) {
+            const Room& currentRoom = roomIt->second;
 
-                auto it = rooms[p.getCurrentRoom()].getExits().find(direction);
-
-                if (it != rooms[p.getCurrentRoom()].getExits().end()) {
-                    movePossible = true;
-                }
-
-                if (movePossible) {
-                    p.setCurrentRoom(it->second);
-                    cout << "You moved in " << p.getCurrentRoom() << endl;
-                } else {
-                    cout << "Move not possible\n" << endl;
-                }
-
-            } else {
-                cout << "Invalid move command. Usage: go <direction>.\n" << endl;
+            auto exitIt = currentRoom.getExits().find(direction);
+            if (exitIt != currentRoom.getExits().end()) {
+                movePossible = true;
+                newRoom = exitIt->second;
             }
-            break;
         }
+
+
+
+        if (movePossible) {
+            auto roomIt = rooms.find(newRoom);
+            if (roomIt != rooms.end()) {
+                const Room& room = roomIt->second;
+
+                    int aggressiveness;
+                    int playerDeadChance;
+
+
+                if (!room.getEnemies().empty()) {
+                    // Determine if the enemy is aggressive
+                        aggressiveness = room.getEnemies().begin()->second.getAggressiveness();
+                        
+
+                } else {
+                    cout << "No enemies in the room." << endl;
+                    // Use stored values when there are no enemies
+                    playerDeadChance = getRandomNumber(0, 100);
+                   cout << "Chance a player dies (in %): " << playerDeadChance << endl;
+                    cout << "Aggresiveness: " << aggressiveness << endl;
+                    
+                    if (playerDeadChance > aggressiveness) {
+                        cout << "Oh no! An aggressive enemy caught you. You have died." << endl;
+                        return;
+                        } else {
+                            cout << "You narrowly escaped the aggressive enemy." << endl;
+                        }
+                }
+
+
+
+                p.setCurrentRoom(room.getId());
+                cout << "You moved to " << newRoom << endl;
+            } else {
+                cout << "Error: Room not found.\n" << endl;
+            }
+        } else {
+            cout << "Invalid direction. Cannot move in that direction.\n" << endl;
+        }
+    } else {
+        cout << "Invalid move command. Usage: go <direction>.\n" << endl;
+    }
+
+    break;
+}
+
+
+
+
+
 
         case Input::ATTACK:
         {
