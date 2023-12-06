@@ -10,6 +10,7 @@ using namespace std;
 // Some strings/commands could be regarded as the same enum
 Input parseInput(const vector<string>& input) {
     if (((input[0] == "look" || input[0] == "see" || input[0] == "check") && input.size() == 1) || 
+        ((input[0] == "look" || input[0] == "check") && input.size() == 2) ||
         ((input[0] == "look" && input[1] == "around") && input.size() == 2) ||
         ((input[0] == "check" && input[1] == "room") && input.size() == 2)) {
         return Input::LOOK;
@@ -52,26 +53,54 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
     string exits;
     bool anyItem;
+    int itemsSize = 0;
     bool anyEnemy;
+    int enemiesSize = 0;
 
     anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
+    itemsSize = rooms[p.getCurrentRoom()].getItems().size();
 
     anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
+    enemiesSize = rooms[p.getCurrentRoom()].getEnemies().size();
 
     exits = rooms[p.getCurrentRoom()].printExits();
 
     switch (enumInput) {
         case Input::LOOK: 
         {
-            cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << endl;
-
             if (anyItem) {
-                cout << "There are items in this room: " << endl;
-                cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+                for (auto item: rooms[p.getCurrentRoom()].getItems()) {
+                    if (input[1] == item.second.getId()) {
+                        cout << item.second.getDescription() << "\n" << endl;
+                        return;
+                    }
+                }
             }
 
             if (anyEnemy) {
+                for (auto enemy: rooms[p.getCurrentRoom()].getEnemies()) {
+                    if (input[1] == enemy.second.getId()) {
+                        cout << enemy.second.getDescription() << "\n" << endl;
+                        return;
+                    }
+                }
+            }
+
+            cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << "\n" << endl;
+
+            if (anyItem && itemsSize > 1) {
+                cout << "There are items in this room: " << endl;
+                cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+            } else if (anyItem) {
+                cout << "There is an item in this room: " << endl;
+                cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+            }
+
+            if (anyEnemy && enemiesSize > 1) {
                 cout << "There are enemies in this room: " << endl;
+                cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
+            } else if (anyEnemy) {
+                cout << "There is an enemy in this room: " << endl;
                 cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
             }
             break;
@@ -147,7 +176,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                     int chance = getRandomNumber(0, 100);
 
                     if (chance < aggressiveness) {
-                        cout << "Enemy has attacked you. You have been defeated\n" << endl;
+                        cout << "Enemy has attacked you. You have been defeated.\n" << endl;
                         exit(0);
                     }
                 }

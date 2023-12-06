@@ -127,23 +127,33 @@ void GameFlow::playGame() {
 void presentCurrentRoom(Player p, map<string, Room>& rooms, map<string, Enemy>& enemies) {
     string exits;
     bool anyItem;
+    int itemsSize = 0;
     bool anyEnemy;
+    int enemiesSize = 0;
 
     anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
+    itemsSize = rooms[p.getCurrentRoom()].getItems().size();
 
     anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
+    enemiesSize = rooms[p.getCurrentRoom()].getEnemies().size();
 
     exits = rooms[p.getCurrentRoom()].printExits();
 
-    cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << endl;
+    cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << "\n" << endl;
 
-    if (anyItem) {
+    if (anyItem && itemsSize > 1) {
         cout << "There are items in this room: " << endl;
+        cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+    } else if (anyItem) {
+        cout << "There is an item in this room: " << endl;
         cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
     }
 
-    if (anyEnemy) {
+    if (anyEnemy && enemiesSize > 1) {
         cout << "There are enemies in this room: " << endl;
+        cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
+    } else if (anyEnemy) {
+        cout << "There is an enemy in this room: " << endl;
         cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
     }
 }
@@ -186,7 +196,7 @@ void checkGameOver(string type, vector<string> conditions_, Player p, map<string
     }
 
     if (win) {
-        cout << "Congratulations! \nYou have completed the map\n" << endl;
+        cout << "Congratulations! \nYou have completed the map.\n" << endl;
         exit(0);
     }
 }
