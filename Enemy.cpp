@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//Constructor implementation
+// Constructor implementation
 Enemy::Enemy(string id, string desc, int aggressiveness, string initialRoom, map<string, Item> killedBy) {
     id_ = id;
     description_ = desc;
@@ -23,31 +23,32 @@ bool Enemy::operator==(const Enemy& other) const {
             this->killed_by == other.killed_by);
 }
 
-// Getter function implementations
+// Get the enemy id
 string Enemy::getId() const {
     return id_;
 }
 
+// Get the enemy description
 string Enemy::getDescription() const {
     return description_;
 }
 
-// Getter function to get the aggressiveness level of the enemy
+// Get the enemy's aggressiveness
 int Enemy::getAggressiveness() const {
     return aggressiveness_;
 }
 
-// Getter function to get the initial room where the enemy is located
+// Get the initial room where the enemy is located
 string Enemy::getInitialRoom() const {
     return initial_room;
 }
 
-// Getter function to get the items required to defeat enemy
+// Get the items required to defeat enemy
 const map<string, Item>& Enemy::getKilledBy() const {
     return killed_by;
 }
 
-// Getter function to get the list of objects that can kill the enemy
+// Get the list of objects that can kill the enemy
 string Enemy::printKilledBy() const {
     string items;
     
@@ -60,14 +61,11 @@ string Enemy::printKilledBy() const {
 
 // Member function implementation to determine if the enemy attacks the player
 bool Enemy::attackPlayer() const {
-
-    // Generate a random number between 0 and 100 to determine if the enemy attacks
     int randomChance = rand() % 101;
-    return randomChance < aggressiveness_;  // enemy will attack unless this condition is true
+    return randomChance < aggressiveness_; 
 }
 
 // Member function implementation to print an attack message
 void Enemy::printAttackMessage() const {
     cout << "The enemy " << id_ << " attacks you and you are defeated. Game over!" << endl;
-  
 }

@@ -5,28 +5,29 @@
 #include <algorithm>
 using namespace std;
 
-// Anytime a Room instance is created, we do not know items and enemies beforehand, as those
-// are created after rooms, and then assigned to rooms
+// Room constructor
 Room::Room(string id, string description, map<string, string> exits) {
     id_ = id;
     description_ = description;
     exits_ = exits;
 }
 
+// Get room id
 string Room::getId() const {
     return id_;
 }
 
+// Get room description
 string Room::getDescription() const {
     return description_;
 }
 
-// This returns the exits available
+// Get all exits of a room
 const map<string, string>& Room::getExits() const {
     return exits_;
 }
 
-// This is used when user asks for possible exits
+// Print available exits of a room
 string Room::printExits() const {
     string exits;
 
@@ -43,15 +44,12 @@ string Room::printExits() const {
     return exits;
 }
 
-// When user asks "go back", this will help find the previous room
-string Room::getPrevExit() const {
-    return prev_exit;
-}
-
+// Get enemies in a room
 const map<string, Enemy>& Room::getEnemies() const {
     return enemies_;
 }
 
+// Print all enemies in the room
 string Room::printEnemies() const {
     string enemies;
     
@@ -62,10 +60,12 @@ string Room::printEnemies() const {
     return enemies;
 }
 
+// Get all items in a room
 const map<string, Item>& Room::getItems() const {
     return items_;
 }
 
+// Print all items in the room
 string Room::printItems() const {
     string items;
 
@@ -76,12 +76,16 @@ string Room::printItems() const {
     return items;
 }
 
-// Function to be used in gameflow, add items one by one
+string Room::printItemDesciption(Item& item) const {
+    return item.getDescription();
+}
+
+// Add item to the room
 void Room::addItem(Item& item) {
     items_[item.getId()] = item;
 }
 
-// Function that runs iterator to remove specific item by reference
+// Remove item from the room
 void Room::removeItem(const string& item) {
     auto it = items_.find(item);
 
@@ -90,27 +94,16 @@ void Room::removeItem(const string& item) {
     }
 }
 
-// Function to be used in gameflow, add enemies one by one
+// Add enemy to the room
 void Room::addEnemy(Enemy& enemy) {
     enemies_[enemy.getId()] = enemy;
 }
 
-// Function that runs iterator to remove specific enemy by reference
+// Remove enemy from the room
 void Room::removeEnemy(const string& enemy) {
     auto it = enemies_.find(enemy);
 
     if (it != enemies_.end()) {
         enemies_.erase(it);
     }
-}
-
-// This relies on the JSON map, where each room has a way to go back to previous room
-// from user's point of view
-void Room::setPrevExit(string exit) {
-    prev_exit = exit;
-}
-
-// Set or unset the player location on rooms
-void Room::setPlayerLocation() {
-    player_location = !player_location;
 }

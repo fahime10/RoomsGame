@@ -2,10 +2,10 @@
 #include <vector>
 #include <map>
 #include "json.hpp"
-#include "classes/Room.h"
-#include "classes/Enemy.h"
-#include "classes/Item.h"
-#include "classes/Player.h"
+#include "Room.h"
+#include "Enemy.h"
+#include "Item.h"
+#include "Player.h"
 using namespace std;
 using json = nlohmann::json;
 

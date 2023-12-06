@@ -1,7 +1,7 @@
-#include "classes/Player.h"
-#include "classes/Room.h"
-#include "classes/Item.h"
-#include "classes/Enemy.h"
+#include "Player.h"
+#include "Room.h"
+#include "Item.h"
+#include "Enemy.h"
 #include <vector>
 #include <map>
 
@@ -10,6 +10,7 @@
 
 enum class Input {
     LOOK,
+    LOOK_ITEM,
     LIST_ITEMS,
     TAKE_ITEM,
     CHECK_ITEM,

@@ -11,6 +11,7 @@ Item::Item(const string id, const string desc, const string initialRoom) {
     initial_room = initialRoom;
 }
 
+// Operator = overloaded to help with iterator
 Item& Item::operator=(const Item& other) {
     if (this != &other) {
         this->id_ = other.id_;
@@ -27,17 +28,17 @@ bool Item::operator==(const Item& other) const {
             this->initial_room == other.initial_room);
 }
 
-// Getter function implementations
+// Get id of item
 string Item::getId() const {
     return id_;
 }
 
-// Getter function to get the description of the object
+// Get the description of the item
 string Item::getDescription() const {
     return description_;
 }
 
-// Getter function to get the initial room where the object is located
+// Get the initial room where the object is located
 string Item::getInitialRoom() const {
     return initial_room;
 }

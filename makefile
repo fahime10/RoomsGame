@@ -1,19 +1,13 @@
 CXX      = g++
-CXXFLAGS = -O0 -g3 -std=c++17 -I./classes
+CXXFLAGS = -O0 -g3 -std=c++17
 
-SRCDIR 	 = ./classes
-
-SOURCES  = $(wildcard $(SRCDIR)/*.cpp) main.cpp GameFlow.cpp Input.cpp
+SOURCES  = $(wildcard *.cpp)
 
 OBJECTS  = $(patsubst %.cpp, %.o, $(filter %.cpp, $(SOURCES)))
 
 TARGET   = main
 
-all: $(TARGET)
-
-# main: main.cpp
-# 	g++ main.cpp -o main
-	
+all: $(TARGET)	
 
 $(TARGET): $(OBJECTS)
 	@echo "Linking $@"

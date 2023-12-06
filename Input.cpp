@@ -6,8 +6,6 @@
 #include <ctime>
 using namespace std;
 
-
-
 // This is required to work with switch statements
 // Some strings/commands could be regarded as the same enum
 Input parseInput(const vector<string>& input) {
@@ -65,33 +63,16 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
     switch (enumInput) {
         case Input::LOOK: 
         {
-            for (auto& room: rooms) {
-                if (p.getCurrentRoom() == room.first) {
-                    cout << "\n" << room.second.getDescription() << endl;
+            cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << endl;
 
-                    if (!room.second.getItems().empty()) {
-                        cout << "There are items in this room: " << endl;
-                        cout << room.second.printItems() << "\n" << endl;
-                    }
+            if (anyItem) {
+                cout << "There are items in this room: " << endl;
+                cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+            }
 
-                    if (!room.second.getEnemies().empty()) {
-                        cout << "There are enemies in this room: " << endl;
-                        
-                        for (auto& enemy: enemies) {
-                            if (enemy.second.getInitialRoom() == room.first) {
-                                cout << "[ " << enemy.second.getId() << " ]" << endl;
-                                cout << enemy.second.getDescription() << endl;
-                                cout << "It can be killed by: " << endl;
-
-                                if (enemy.second.getKilledBy().empty()) {
-                                    cout << "[ Bare hands ] \n" << endl;
-                                } else {
-                                    cout << enemy.second.printKilledBy() << "\n" <<  endl;
-                                }
-                            }
-                        }
-                    }
-                }
+            if (anyEnemy) {
+                cout << "There are enemies in this room: " << endl;
+                cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
             }
             break;
         }
@@ -162,7 +143,6 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
                 if (anyEnemy) {
                     int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
-                    cout << "Chance of survival: " << (100 - aggressiveness) << " %" << endl;
 
                     int chance = getRandomNumber(0, 100);
 

@@ -27,7 +27,7 @@ public:
 
     const map<string, string>& getExits() const;
 
-    string getPrevExit() const;
+    string printItemDesciption(Item& item) const;
 
     void addItem(Item&);
 
@@ -37,26 +37,19 @@ public:
 
     void removeEnemy(const string&);
 
-    void setPrevExit(string);
-
     string printItems() const;
 
     string printEnemies() const;
-
-    void setPlayerLocation();
 
     string printExits() const;
 
 private:
     string id_;
     string description_;
-    string prev_exit;
 
     map<string, Item> items_;
     map<string, Enemy> enemies_;
     map<string, string> exits_;
-
-    bool player_location;
 };
 
 

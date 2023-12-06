@@ -18,64 +18,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-	ifstream fin("json_maps/" + map);
+	ifstream fin(map);
 	json j;
 	fin >> j;
 
     GameFlow game;
     game.buildGame(j);
 	game.playGame();
-
-	// vector<int> v = {0, 1, 2, 3, 4, 5};
-
-	// for (auto g: v) {
-	// 	cout << g << endl;
-	// }
-
-	// int val = 3;
-
-	// auto it = find(v.begin(), v.end(), val);
-
-	// if (it != v.end()) {
-	// 	v.erase(it);
-	// }
-
-	// for (auto num: v) {
-	// 	cout << num << " " << endl; 
-	// }
-
-	// // This outputs how many things there are at the top level
-	// // and the keys (5: rooms, objects, enemies, player, objective)
-	// int numTypes = j.size();
-	// cout << numTypes << endl;
-
-	// for(auto e : j.items()) {
-	// 	string s = e.key();
-	// 	cout << s << endl;
-	// }
-
-	// // This outputs the number of rooms and something about the 2nd room
-	// int numRooms = j["rooms"].size();
-	// cout << numRooms << endl;
-	// string room1desc =  j["rooms"][1]["desc"].get<string>();
-	// cout << room1desc << endl;
-
-	// // This retrieves the aggressiveness of the first enemy,
-	// // and the list of objects that kills it as a vector
-	// int agg = j["enemies"][0]["aggressiveness"].get<int>();
-	// cout << agg << endl;
-	// vector<string> v = j["enemies"][0]["killedby"].get<vector<string>>();
-	// for(string s : v) cout << s << endl;
-
-
-	// // if you want to handle fields that may or may not exist in the json
-	// // file, here is one way to do it:
-	// string s;
-	// try {
-	// 	s = j["enemies"][0]["intro_msg"].get<string>();
-	// }
-	// catch(const json::exception& e) {
-	// 	s = "some default message";
-	// }
-	// cout << s << endl;
 }

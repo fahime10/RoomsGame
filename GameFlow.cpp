@@ -1,4 +1,3 @@
-#include <map>
 #include "json.hpp"
 #include "GameFlow.h"
 #include "Input.h"
@@ -90,7 +89,7 @@ void GameFlow::playGame() {
 
     getline(cin, command);
 
-    // This is used to handle an array of strings
+    // This is used to handle a vector of strings
     istringstream is(command);
     vector<string> strArray;
     string singleStr;
@@ -126,38 +125,31 @@ void GameFlow::playGame() {
 
 // This presents the current room the player is at
 void presentCurrentRoom(Player p, map<string, Room>& rooms, map<string, Enemy>& enemies) {
-    for (auto& room: rooms) {
-        if (p.getCurrentRoom() == room.first) {
-            cout << "\n" << room.second.getDescription() << endl;
+    string exits;
+    bool anyItem;
+    bool anyEnemy;
 
-            if (!room.second.getItems().empty()) {
-                cout << "There are items in this room: " << endl;
-                cout << room.second.printItems() << "\n" << endl;
-            }
+    anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
 
-            if (!room.second.getEnemies().empty()) {
-                cout << "There are enemies in this room: " << endl;
-                
-                for (auto& enemy: enemies) {
-                    if (enemy.second.getInitialRoom() == room.first) {
-                        cout << "[ " << enemy.second.getId() << " ]" << endl;
-                        cout << enemy.second.getDescription() << endl;
-                        cout << "It can be killed by: " << endl;
+    anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
 
-                        if (enemy.second.getKilledBy().empty()) {
-                            cout << "[ Bare hands ] \n" << endl;
-                        } else {
-                            cout << enemy.second.printKilledBy() << "\n" <<  endl;
-                        }
-                    }
-                }
-            }
-        }
+    exits = rooms[p.getCurrentRoom()].printExits();
+
+    cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << endl;
+
+    if (anyItem) {
+        cout << "There are items in this room: " << endl;
+        cout << rooms[p.getCurrentRoom()].printItems() << "\n" << endl;
+    }
+
+    if (anyEnemy) {
+        cout << "There are enemies in this room: " << endl;
+        cout << rooms[p.getCurrentRoom()].printEnemies() << "\n" << endl;
     }
 }
 
-// This will constantly check if the player has been defeated by enemy or
-// by soft-locking themselves
+// This will constantly check if the player has been defeated by enemy or 
+// completed the map
 void checkGameOver(string type, vector<string> conditions_, Player p, map<string, Room>& rooms) {
     bool win = true;
 
@@ -193,34 +185,28 @@ void checkGameOver(string type, vector<string> conditions_, Player p, map<string
         }
     }
 
-    // for (Room& room: rooms) {
-    //     if (p.getCurrentRoom() == room.getId()) {
-    //         if (room.getExits().empty()) {
-    //             cout << room.getDescription() << "\n" << endl;
-    //             cout << "Unfortunately, there are no exits from this room. Game  over.\n" << endl;
-    //             exit(0); 
-    //         }
-    //     }
-    // }
-
     if (win) {
         cout << "Congratulations! \nYou have completed the map\n" << endl;
         exit(0);
     }
 }
 
+// Get the type of win condition
 string GameFlow::getType() const {
     return type_;
 }
 
+// Get the conditions required to win the map
 vector<string> GameFlow::getConditions() const {
     return conditions_;
 }
 
+// Set the type of win condition
 void GameFlow::setType(string type) {
     type_ = type;
 }
 
+// Set the conditions required to win the map
 void GameFlow::setConditions(vector<string> conditions) {
     conditions_ = conditions;
 }
