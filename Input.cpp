@@ -9,7 +9,7 @@ using namespace std;
 // Some strings/commands could be regarded as the same enum
 Input parseInput(const vector<string>& input) {
     if (((input[0] == "look" || input[0] == "see" || input[0] == "check") && input.size() == 1) || 
-        ((input[0] == "look" || input[0] == "check") && input.size() == 2) ||
+        ((input[0] == "look" || input[0] == "check") && input.size() > 1) ||
         ((input[0] == "look" && input[1] == "around") && input.size() == 2) ||
         ((input[0] == "check" && input[1] == "room") && input.size() == 2)) {
         return Input::LOOK;
@@ -149,8 +149,10 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 } else {
                     cout << "Item not found in the room\n" << endl;
                 }
-                break;
+            } else {
+                cout << "Item not found in the room\n" << endl;
             }
+            break;
         }
 
         case Input::CHECK_ITEM:
