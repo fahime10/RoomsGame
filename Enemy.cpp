@@ -1,7 +1,4 @@
 #include "Enemy.h"
-#include <iostream>
-#include <cstdlib> // for rand function (STL used)
-#include <vector> // handling dynamic arrays (STL used)
 
 using namespace std;
 
@@ -63,9 +60,4 @@ string Enemy::printKilledBy() const {
 bool Enemy::attackPlayer() const {
     int randomChance = rand() % 101;
     return randomChance < aggressiveness_; 
-}
-
-// Member function implementation to print an attack message
-void Enemy::printAttackMessage() const {
-    cout << "The enemy " << id_ << " attacks you and you are defeated. Game over!" << endl;
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 #include "Item.h"
 
 using namespace std;
@@ -27,7 +28,6 @@ public:
     const map<string, Item>& getKilledBy() const;
 
     bool attackPlayer() const;
-    void printAttackMessage() const;
 
 private:
     string id_;

@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Input.h"
 #include "GameFlow.h"
 #include <algorithm>
@@ -23,7 +22,7 @@ Input parseInput(const vector<string>& input) {
     } else if ((input[0] == "grab" || input[0] == "take" || input[0] == "pick")) {
         return Input::TAKE_ITEM;
 
-    } else if (((input[0] == "check" || input[0] == "see") && input.size() == 2) ||
+    } else if (((input[0] == "check" || input[0] == "see" || input[0] == "look") && input.size() == 2) ||
                  (input[0] == "look" && input[1] == "at") && input.size() == 3) {
         return Input::CHECK_ITEM;
 
@@ -42,35 +41,40 @@ Input parseInput(const vector<string>& input) {
     return Input::UNKNOWN;
 }
 
-
+// Get a random number between 0 and 100
 int getRandomNumber(int min, int max) {
-    std::srand(std::time(0)); // Seed the random number generator with the current time
-    return std::rand() % (max - min + 1) + min;
+    srand(time(0));
+    return rand() % (max - min + 1) + min;
 }
 
+// Function to handle the different actions such as moving rooms, attacking enemies and more
 void handleUserInput(vector<string> input, Input enumInput, Player& p, 
                      map<string, Room>& rooms, map<string, Item>& items, map<string, Enemy>& enemies) {
-
-    string exits;
-    bool anyItem;
     int itemsSize = 0;
-    bool anyEnemy;
     int enemiesSize = 0;
 
-    anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
+    bool anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
     itemsSize = rooms[p.getCurrentRoom()].getItems().size();
 
-    anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
+    bool anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
     enemiesSize = rooms[p.getCurrentRoom()].getEnemies().size();
-
-    exits = rooms[p.getCurrentRoom()].printExits();
 
     switch (enumInput) {
         case Input::LOOK: 
         {
+            string request;
+
+            for (int i = 1; i < input.size(); i++) {
+                if (i + 1 == input.size()) {
+                    request += input[i];
+                } else {
+                    request += input[i] + " ";   
+                }
+            }
+
             if (anyItem) {
                 for (auto item: rooms[p.getCurrentRoom()].getItems()) {
-                    if (input[1] == item.second.getId()) {
+                    if (request == item.second.getId()) {
                         cout << item.second.getDescription() << "\n" << endl;
                         return;
                     }
@@ -79,10 +83,17 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
             if (anyEnemy) {
                 for (auto enemy: rooms[p.getCurrentRoom()].getEnemies()) {
-                    if (input[1] == enemy.second.getId()) {
+                    if (request == enemy.second.getId()) {
                         cout << enemy.second.getDescription() << "\n" << endl;
                         return;
                     }
+                }
+            }
+
+            for (auto item: p.getInventory()) {
+                if (request == item.second.getId()) {
+                    cout << item.second.getDescription() << "\n" << endl;
+                    return;
                 }
             }
 
@@ -114,6 +125,8 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
         case Input::TAKE_ITEM:
         {
+            bool itemFound = false;
+
             if (anyItem) {
                 string requestedItem = "";
 
@@ -125,9 +138,9 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                     }
                 }
                 
-                bool itemFound = items[requestedItem].getId() == requestedItem;
+                itemFound = items[requestedItem].getId() == requestedItem;
 
-                if (itemFound) {
+                if (itemFound && !requestedItem.empty()) {
                     p.addToInventory(items[requestedItem]);
                     rooms[p.getCurrentRoom()].removeItem(requestedItem);
                     items.erase(requestedItem);
@@ -206,7 +219,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
         case Input::ATTACK:
         {
-            bool success;
+            bool success = false;
             string requestedEnemy = "";
             bool enemyFound;
 
@@ -218,16 +231,17 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
                 }
             }
 
-            enemyFound = (enemies[requestedEnemy].getId() == requestedEnemy) && 
-                         (p.getCurrentRoom() == enemies[requestedEnemy].getInitialRoom());
+            enemyFound = 
+                (enemies[requestedEnemy].getId() == requestedEnemy) && 
+                (p.getCurrentRoom() == enemies[requestedEnemy].getInitialRoom());
 
             if (enemyFound) {
                 success = 
-                all_of(enemies[requestedEnemy].getKilledBy().begin(),
-                    enemies[requestedEnemy].getKilledBy().end(),
-                    [&p](const auto& enemyItems) {
-                        return p.getInventory().count(enemyItems.first) > 0;
-                    });
+                    all_of(enemies[requestedEnemy].getKilledBy().begin(),
+                        enemies[requestedEnemy].getKilledBy().end(),
+                        [&p](const auto& enemyItems) {
+                            return p.getInventory().count(enemyItems.first) > 0;
+                        });
             }
 
             if (success) {
@@ -244,7 +258,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
 
         case Input::LIST_EXITS:
         {
-            cout << exits << endl;
+            cout << rooms[p.getCurrentRoom()].printExits() << endl;
             break;
         }
 

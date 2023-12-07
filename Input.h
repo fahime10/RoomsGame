@@ -4,13 +4,13 @@
 #include "Enemy.h"
 #include <vector>
 #include <map>
+#include <iostream>
 
 #ifndef INPUT_H
 #define INPUT_H
 
 enum class Input {
     LOOK,
-    LOOK_ITEM,
     LIST_ITEMS,
     TAKE_ITEM,
     CHECK_ITEM,
