@@ -10,11 +10,9 @@ TARGET   = main
 all: $(TARGET)	
 
 $(TARGET): $(OBJECTS)
-	@echo "Linking $@"
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 %.o: %.cpp
-	@echo "Compiling $<"
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 clean:

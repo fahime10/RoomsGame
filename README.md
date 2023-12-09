@@ -14,7 +14,7 @@ Another way is to collect specific items found in the map.
 Reaching a specific room can also be a victory condition.
 
 ## Extra features
-The program handles errors in the JSON maps.
+The program can handle errors from user inputting a non-existing map and when using a bad JSON map.
 For example, the program will not build the map if there are typos in the fields or
 if there are missing fields, then the game will display error reading the file.
 The language that the user can use is extended, but not extensive.
