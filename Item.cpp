@@ -4,8 +4,8 @@
 
 using namespace std;
 
-// Constructor implementation
-Item::Item(const string id, const string desc, const string initialRoom) {
+// Item constructor
+Item::Item(string id, string desc, string initialRoom) {
     id_ = id;
     description_ = desc;
     initial_room = initialRoom;

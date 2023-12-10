@@ -4,12 +4,11 @@
 using namespace std;
 using json = nlohmann::json;
 
-void presentCurrentRoom(Player, map<string, Room>&, map<string, Enemy>&);
+void presentCurrentRoom(Player, map<string, Room>);
 void checkGameOver(string, vector<string>, Player, map<string, Room>&);
 
-// Build all instances of Room, Item, Enemy and Player first, then populate
-// all the Room instances with Item, Enemy and Player as defined in the 
-// chosen JSON map
+// Build game with Room objects and assign into those the Item, Enemy and 
+// Player objects according to JSON maps
 void GameFlow::buildGame(json j) {
     try {
         for (auto room: j["rooms"]) {
@@ -46,32 +45,24 @@ void GameFlow::buildGame(json j) {
         p_ = Player(j["player"]["initialroom"]);
 
         for (auto& room: rooms_) {
-            for (auto& enemy: enemies_) {
+            for (auto enemy: enemies_) {
                 if (enemy.second.getInitialRoom() == room.first) {
                     room.second.addEnemy(enemy.second);
                 }
             }
 
-            for (auto& item: items_) {
+            for (auto item: items_) {
                 if (item.second.getInitialRoom() == room.first) {
                     room.second.addItem(item.second);
                 }
             }
-
-            if (p_.getInitialRoom() == room.first) {
-                p_.setCurrentRoom(room.second.getId());
-            } 
         }
 
-        setType(j["objective"]["type"]);
-
-        vector<string> conditions;
+        type_ = j["objective"]["type"];
         
-        for (auto what: j["objective"]["what"]) {
-            conditions.push_back(what);
+        for (auto condition: j["objective"]["what"]) {
+            conditions_.push_back(condition);
         }
-
-        setConditions(conditions);
 
     } catch (exception ex) {
         cerr << "Error reading file" << endl;
@@ -81,63 +72,47 @@ void GameFlow::buildGame(json j) {
 
 // Function to play the game and handle all sorts of user input
 void GameFlow::playGame() {
-    presentCurrentRoom(p_, rooms_, enemies_);
-    
-    string currentRoom = p_.getCurrentRoom();
-
     string command;
 
-    getline(cin, command);
+    presentCurrentRoom(p_, rooms_);
 
-    // This is used to handle a vector of strings
-    istringstream is(command);
-    vector<string> strArray;
-    string singleStr;
+    do {
+        string currentRoom = p_.getCurrentRoom();
 
-    while (is >> singleStr) {
-        strArray.push_back(singleStr);
-    }
-
-    Input enumInput;
-
-    // This is where user input is handled
-    while (command != "quit" && command != "q") {
-        enumInput = parseInput(strArray);
-        handleUserInput(strArray, enumInput, p_, rooms_, items_, enemies_);
-        checkGameOver(type_, conditions_, p_, rooms_);
-
-        if (p_.getCurrentRoom() != currentRoom) {
-            presentCurrentRoom(p_, rooms_, enemies_);
-            currentRoom = p_.getCurrentRoom();
-        }
+        cout << "> ";
 
         getline(cin, command);
 
-        strArray.clear();
+        istringstream strStream(command);
+        vector<string> strArray;
+        string singleStr;
 
-        istringstream is(command);
-
-        while (is >> singleStr) {
+        while (strStream >> singleStr) {
             strArray.push_back(singleStr);
         }
-    }
+
+        Input enumInput = parseInput(strArray);
+        handleInput(strArray, enumInput, p_, rooms_, items_, enemies_);
+        checkGameOver(type_, conditions_, p_, rooms_);
+
+        if (p_.getCurrentRoom() != currentRoom) {
+            presentCurrentRoom(p_, rooms_);
+            currentRoom = p_.getCurrentRoom();
+        }
+
+    } while (command != "quit" && command != "q");
 }
 
-// This presents the current room the player is at
-void presentCurrentRoom(Player p, map<string, Room>& rooms, map<string, Enemy>& enemies) {
-    string exits;
-    bool anyItem;
+// Function to present the current room the player is at
+void presentCurrentRoom(Player p, map<string, Room> rooms) {
     int itemsSize = 0;
-    bool anyEnemy;
     int enemiesSize = 0;
 
-    anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
+    bool anyItem = !rooms[p.getCurrentRoom()].getItems().empty();
     itemsSize = rooms[p.getCurrentRoom()].getItems().size();
 
-    anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
+    bool anyEnemy = !rooms[p.getCurrentRoom()].getEnemies().empty();
     enemiesSize = rooms[p.getCurrentRoom()].getEnemies().size();
-
-    exits = rooms[p.getCurrentRoom()].printExits();
 
     cout << "\n" << rooms[p.getCurrentRoom()].getDescription() << "\n" << endl;
 
@@ -160,13 +135,13 @@ void presentCurrentRoom(Player p, map<string, Room>& rooms, map<string, Enemy>& 
 
 // This will constantly check if the player has been defeated by enemy or 
 // completed the map
-void checkGameOver(string type, vector<string> conditions_, Player p, map<string, Room>& rooms) {
+void checkGameOver(string type, vector<string> conditions, Player p, map<string, Room>& rooms) {
     bool win = true;
 
     if (type == "kill") {
-        for (string& objective: conditions_) {
-            for (auto& room: rooms) {
-                for (const auto& enemy: room.second.getEnemies()) {
+        for (string objective: conditions) {
+            for (auto room: rooms) {
+                for (const auto enemy: room.second.getEnemies()) {
                     if (enemy.second.getId() == objective) {
                         win = false;
                         break;
@@ -175,9 +150,9 @@ void checkGameOver(string type, vector<string> conditions_, Player p, map<string
             }
         }
     } else if (type == "collect") {
-        for (string& objective: conditions_) {
-            for (auto& room: rooms) {
-                for (const auto& item: room.second.getItems()) {
+        for (string objective: conditions) {
+            for (auto room: rooms) {
+                for (const auto item: room.second.getItems()) {
                     if (item.second.getId() == objective) {
                         win = false;
                         break;
@@ -188,7 +163,7 @@ void checkGameOver(string type, vector<string> conditions_, Player p, map<string
 
 
     } else if (type == "room") {
-        for (string& objective: conditions_) {
+        for (string objective: conditions) {
             if (p.getCurrentRoom() != objective) {
                 win = false;
             }
@@ -209,14 +184,4 @@ string GameFlow::getType() const {
 // Get the conditions required to win the map
 vector<string> GameFlow::getConditions() const {
     return conditions_;
-}
-
-// Set the type of win condition
-void GameFlow::setType(string type) {
-    type_ = type;
-}
-
-// Set the conditions required to win the map
-void GameFlow::setConditions(vector<string> conditions) {
-    conditions_ = conditions;
 }

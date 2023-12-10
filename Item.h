@@ -2,20 +2,19 @@
 #define ITEM_H
 
 #include <string>
-
 using namespace std;
 
 class Item {
 public:
     Item() = default;
 
-    Item(const string id, const string desc, const string initialRoom);
+    Item(string, string, string);
 
     ~Item() = default;
 
-    Item& operator=(const Item& other);
+    Item& operator=(const Item&);
 
-    bool operator==(const Item& other) const;
+    bool operator==(const Item&) const;
 
     string getId() const;
     string getDescription() const;

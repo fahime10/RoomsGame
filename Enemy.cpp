@@ -2,7 +2,7 @@
 
 using namespace std;
 
-// Constructor implementation
+// Enemy constructor
 Enemy::Enemy(string id, string desc, int aggressiveness, string initialRoom, map<string, Item> killedBy) {
     id_ = id;
     description_ = desc;

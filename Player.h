@@ -14,15 +14,12 @@ public:
     ~Player() = default;
 
     string getInitialRoom() const;
-
     string getCurrentRoom() const;
-
     string viewInventory() const;
 
     const map<string, Item> getInventory() const;
 
     void addToInventory(Item&);
-
     void setCurrentRoom(string);
 
 private:

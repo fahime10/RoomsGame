@@ -18,29 +18,20 @@ public:
     ~Room() = default;
 
     string getId() const;
-
     string getDescription() const;
 
     const map<string, Enemy>& getEnemies() const;
-
     const map<string, Item>& getItems() const;
-
     const map<string, string>& getExits() const;
 
-    string printItemDesciption(Item& item) const;
-
     void addItem(Item&);
-
     void removeItem(const string&);
-
     void addEnemy(Enemy&);
-
     void removeEnemy(const string&);
 
+    string printItemDesciption(Item&) const;
     string printItems() const;
-
     string printEnemies() const;
-
     string printExits() const;
 
 private:

@@ -21,10 +21,9 @@ enum class Input {
     UNKNOWN
 };
 
-Input parseInput(const vector<string>& input);
+Input parseInput(const vector<string>&);
 
-void handleUserInput(vector<string> input, Input enumInput, Player& p, 
-                     map<string, Room>& rooms, map<string, Item>& items, map<string, Enemy>& enemies);
+void handleInput(vector<string>, Input, Player&, map<string, Room>&, map<string, Item>&, map<string, Enemy>&);
 
 
 #endif // INPUT_H

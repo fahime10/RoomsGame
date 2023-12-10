@@ -35,7 +35,7 @@ string Room::printExits() const {
 
     if (!exits_.empty()) {
         for (const auto& map: exits_) {
-            exits += map.first + ", which leads to " + map.second + " \n";
+            exits += map.first + " leads to " + map.second + " \n";
         }
     } else {
         exits += "There are no exits";
@@ -54,7 +54,7 @@ string Room::printEnemies() const {
     string enemies;
     
     for (auto enemy: enemies_) {
-        enemies += "[ " + enemy.second.getId() + " ]" + " \n";
+        enemies += enemy.second.getId() + "\n";
     }
     
     return enemies;
@@ -70,7 +70,7 @@ string Room::printItems() const {
     string items;
 
     for (const auto& item: items_) {
-        items += "[ " + item.second.getId() + " ] \n";
+        items += item.second.getId() + "\n";
     }
 
     return items;

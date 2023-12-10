@@ -17,17 +17,10 @@ class GameFlow {
 
         string getType() const;
 
-        vector<string> getConditions() const; 
+        vector<string> getConditions() const;
 
         void buildGame(json);
-
         void playGame();
-
-        void printItems() const;
-
-        void setType(string);
-
-        void setConditions(vector<string>);
 
     private:
         map<string, Room> rooms_;

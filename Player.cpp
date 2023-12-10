@@ -3,6 +3,7 @@
 // Player constructor
 Player::Player(string initialRoom) {
     initial_room = initialRoom;
+    current_room = initial_room;
 }
 
 // Get player's initial room
@@ -31,7 +32,7 @@ string Player::viewInventory() const {
     items = "Your items are: \n";
 
     for (const auto item: inventory_) {
-        items += "[ " + item.second.getId() + " ] \n";
+        items += item.second.getId() + "\n";
     }
 
     return items;

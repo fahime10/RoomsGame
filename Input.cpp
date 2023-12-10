@@ -5,8 +5,7 @@
 #include <ctime>
 using namespace std;
 
-// This is required to work with switch statements
-// Some strings/commands could be regarded as the same enum
+// Function to obtain an enum type
 Input parseInput(const vector<string>& input) {
     if (((input[0] == "look" || input[0] == "see" || input[0] == "check") && input.size() == 1) || 
         ((input[0] == "look" || input[0] == "check") && input.size() > 1) ||
@@ -48,8 +47,8 @@ int getRandomNumber(int min, int max) {
 }
 
 // Function to handle the different actions such as moving rooms, attacking enemies and more
-void handleUserInput(vector<string> input, Input enumInput, Player& p, 
-                     map<string, Room>& rooms, map<string, Item>& items, map<string, Enemy>& enemies) {
+void handleInput(vector<string> input, Input enumInput, Player& p, map<string, Room>& rooms, 
+                 map<string, Item>& items, map<string, Enemy>& enemies) {
     int itemsSize = 0;
     int enemiesSize = 0;
 
@@ -180,41 +179,47 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
         }
         
         case Input::MOVE: {
-            if (input.size() == 2) {
-                string direction = input[1];
-                bool movePossible = false;
-                string newRoom = "";
+            string requestedDirection = "";
 
-                if (anyEnemy) {
-                    int aggressiveness = rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
-
-                    int chance = getRandomNumber(0, 100);
-
-                    if (chance < aggressiveness) {
-                        cout << "Enemy has attacked you. You have been defeated.\n" << endl;
-                        exit(0);
-                    }
-                }
-
-                auto roomIt = rooms.find(p.getCurrentRoom());
-                if (roomIt != rooms.end()) {
-                    const Room& currentRoom = roomIt->second;
-
-                    auto exitIt = currentRoom.getExits().find(direction);
-                    if (exitIt != currentRoom.getExits().end()) {
-                        movePossible = true;
-                        newRoom = exitIt->second;
-                    }
-                }
-
-                if (movePossible) {
-                    p.setCurrentRoom(newRoom);
-                    cout << "You moved to " << newRoom << endl;
+            for (int i = 1; i < input.size(); i++) {
+                if (i + 1 == input.size()) {
+                    requestedDirection += input[i];
                 } else {
-                    cout << "Instruction not understood\n" << endl;
+                    requestedDirection += input[i] + " ";
                 }
+            }
+
+            bool movePossible = false;
+            string newRoom = "";
+
+            if (anyEnemy) {
+                int aggressiveness = 
+                    rooms[p.getCurrentRoom()].getEnemies().begin()->second.getAggressiveness();
+
+                int chance = getRandomNumber(0, 100);
+
+                if (chance < aggressiveness) {
+                    cout << "Enemy has attacked you. You have been defeated.\n" << endl;
+                    exit(0);
+                }
+            }
+
+            auto roomIt = rooms.find(p.getCurrentRoom());
+            if (roomIt != rooms.end()) {
+                const Room& currentRoom = roomIt->second;
+
+                auto exitIt = currentRoom.getExits().find(requestedDirection);
+                if (exitIt != currentRoom.getExits().end()) {
+                    movePossible = true;
+                    newRoom = exitIt->second;
+                }
+            }
+
+            if (movePossible) {
+                p.setCurrentRoom(newRoom);
+                cout << "You moved to " << newRoom << endl;
             } else {
-                cout << "Invalid direction. Cannot move in that direction.\n" << endl;
+                cout << "Instruction not understood\n" << endl;
             }
             break;
         }
@@ -247,7 +252,7 @@ void handleUserInput(vector<string> input, Input enumInput, Player& p,
             }
 
             if (success) {
-                cout << "Enemy " << enemies[requestedEnemy].getId() << " has been defeated\n" << endl;
+                cout << enemies[requestedEnemy].getId() << " has been defeated\n" << endl;
                 rooms[p.getCurrentRoom()].removeEnemy(requestedEnemy);
             } else if (!enemyFound) {
                 cout << "Instruction not understood\n" << endl;

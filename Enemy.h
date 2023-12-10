@@ -13,11 +13,11 @@ class Enemy {
 public:
     Enemy() = default;
 
-    Enemy(string id, string desc, int aggressiveness, string initialRoom, map<string, Item> killedBy);
+    Enemy(string, string, int, string, map<string, Item>);
 
     ~Enemy() = default;
 
-    bool operator==(const Enemy& other) const;
+    bool operator==(const Enemy&) const;
 
     string getId() const;
     string getDescription() const;
