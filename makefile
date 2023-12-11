@@ -3,11 +3,11 @@ CXXFLAGS = -O0 -g3 -std=c++17
 
 SOURCES  = $(wildcard *.cpp)
 
-OBJECTS  = $(patsubst %.cpp, %.o, $(filter %.cpp, $(SOURCES)))
+OBJECTS  = $(SOURCES:.cpp=.o)
 
 TARGET   = main
 
-all: $(TARGET)	
+all: $(TARGET)
 
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@

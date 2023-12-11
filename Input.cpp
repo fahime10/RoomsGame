@@ -253,6 +253,7 @@ void handleInput(vector<string> input, Input enumInput, Player& p, map<string, R
 
             if (success) {
                 cout << enemies[requestedEnemy].getId() << " has been defeated\n" << endl;
+                enemies.erase(requestedEnemy);
                 rooms[p.getCurrentRoom()].removeEnemy(requestedEnemy);
             } else if (!enemyFound) {
                 cout << "Instruction not understood\n" << endl;
