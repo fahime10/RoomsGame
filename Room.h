@@ -37,7 +37,6 @@ public:
 private:
     string id_;
     string description_;
-
     map<string, Item> items_;
     map<string, Enemy> enemies_;
     map<string, string> exits_;

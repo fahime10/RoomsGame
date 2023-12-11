@@ -26,9 +26,7 @@ class GameFlow {
         map<string, Room> rooms_;
         map<string, Enemy> enemies_;
         map<string, Item> items_;
-
         string type_;
         vector<string> conditions_;
-
         Player p_;
 };

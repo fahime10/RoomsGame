@@ -1,3 +1,6 @@
+#ifndef INPUT_H
+#define INPUT_H
+
 #include "Player.h"
 #include "Room.h"
 #include "Item.h"
@@ -5,9 +8,6 @@
 #include <vector>
 #include <map>
 #include <iostream>
-
-#ifndef INPUT_H
-#define INPUT_H
 
 enum class Input {
     LOOK,

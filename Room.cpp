@@ -75,6 +75,7 @@ string Room::printItems() const {
     return items;
 }
 
+// Print the selected item's description
 string Room::printItemDesciption(Item& item) const {
     return item.getDescription();
 }
