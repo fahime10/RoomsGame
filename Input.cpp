@@ -258,7 +258,7 @@ void handleInput(vector<string> input, Input enumInput, Player& p, map<string, R
             } else if (!enemyFound) {
                 cout << "Instruction not understood\n" << endl;
             } else {
-                cout << "You do not have enough items. \nYou have been defeated" << endl;
+                cout << "\nYou do not have enough items. \nYou have been defeated\n" << endl;
                 exit(0);
             }
             break;

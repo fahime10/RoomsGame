@@ -31,14 +31,13 @@ const map<string, string>& Room::getExits() const {
 string Room::printExits() const {
     string exits;
 
-    exits = "Your exits are: \n";
-
     if (!exits_.empty()) {
+        exits = "Your exits are: \n";
         for (const auto& map: exits_) {
             exits += map.first + " leads to " + map.second + " \n";
         }
     } else {
-        exits += "There are no exits";
+        exits += "There are no exits\n";
     }
 
     return exits;

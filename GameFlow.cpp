@@ -171,7 +171,7 @@ void checkGameOver(string type, vector<string> conditions, Player p, map<string,
     }
 
     if (win) {
-        cout << "Congratulations! \nYou have completed the map.\n" << endl;
+        cout << "\nCongratulations! \nYou have completed the map.\n" << endl;
         exit(0);
     }
 }
